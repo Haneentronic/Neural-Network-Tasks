@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import random
-from Task1.preprocessing import PreProcessing
+from Task1.preprocessing import *
 class perceptron:
     def __init__(self,data,ephocs,learningrate,bais):
         self.data=data
