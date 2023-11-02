@@ -77,19 +77,3 @@ class Adaline:
         # Mariam, code here. Delete pass and do art
 
 
-# Just for testing and will be REMOVED
-pre = PreProcessing()
-pre.read_data("Dry_Bean_Dataset.csv", ['Area', 'roundnes'],
-              ['BOMBAY', 'CALI'])
-
-adaline = Adaline()
-adaline.train(pre.x, pre.y, 2, 0.5, 0.1)
-print(adaline.weights)
-print(adaline.mse)
-
-
-# plt.scatter(pre.df['Area'], pre.df['roundnes'])
-# plt.xlabel('Area')
-# plt.ylabel('Perimeter')
-# plt.title('Scatter Plot between Feature1 and Feature2')
-# plt.show()
