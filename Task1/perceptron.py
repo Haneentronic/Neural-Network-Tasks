@@ -1,6 +1,6 @@
 import numpy as np
 import random
-
+import pandas as pd
 
 class Perceptron:
     def __init__(self, data, ephocs, learningrate, bais):
@@ -26,3 +26,4 @@ class Perceptron:
 
     def perceptron_test(self):
         self.prediction = np.sign(np.dot(self.data.x_test, self.w.T))
+
