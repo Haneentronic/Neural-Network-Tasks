@@ -77,6 +77,7 @@ class Adaline:
         # Mariam, code here. Delete pass and do art
 
 
+# Just for testing and will be REMOVED
 pre = PreProcessing()
 pre.read_data("Dry_Bean_Dataset.csv", ['Area', 'roundnes'],
               ['BOMBAY', 'CALI'])
