@@ -272,3 +272,5 @@ class Task1:
             self.roundnes_checkbox.config(state="normal")
             self.major_checkbox.config(state="normal")
             self.minor_checkbox.config(state="normal")
+
+

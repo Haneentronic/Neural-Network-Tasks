@@ -1,15 +1,25 @@
 import numpy as np
 import random
 
-
-def perceptron(x, t, ephocs, learningrate, b):
-    if b == 1:
-        b = random.random()
-    w = np.random.randn(2)
-    for n in range(ephocs):
-        for i in range(x.shape[0]):
-            y = np.sign(np.dot(x.iloc[i, :], w.T) + b)
-            if y != t[i]:
-                loss = t[i] - y
-                w = w + (np.dot(loss * learningrate, x.iloc[i, :]))
-    return w
+class perceptron:
+    def init(self):
+        self.x_train = None
+        self.y_train = None
+        self.x_test = None
+        self.y_test = None
+        self.ephocs = None
+        self.learningrate = None
+        self.bais = None
+    def Perceptron(self):
+        if self.bais:
+            bais = random.random()
+        else:
+            bais=0
+        w = np.random.randn(2)
+        for n in range(self.ephocs):
+            for i in range(self.x_train.shape[0]):
+                y = np.sign(np.dot(self.x_train.iloc[i, :], w.T) + bais)
+                if y != self.y_train[i]:
+                    loss = self.y_train[i] - y
+                    w = w + (np.dot(loss * self.learningrate, self.x_train.iloc[i, :]))
+        return np.dot(w,self.x_test)
