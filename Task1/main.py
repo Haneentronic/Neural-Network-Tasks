@@ -2,6 +2,8 @@ from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
 
+from Task1.preprocessing import PreProcessing
+from Task1.perceptron import Perceptron
 
 class Task1:
     def __init__(self):
@@ -181,7 +183,16 @@ class Task1:
 
         self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/run_btn.png")
         self.run_button = Button(self.root, image=self.run_button_image, borderwidth=0, cursor="hand2", bd=0,
-                                 background=self.mainColor, activebackground=self.mainColor)
+                                 background=self.mainColor, activebackground=self.mainColor,command=lambda:self.run())
+    def run(self):
+        preprocessing=PreProcessing()
+        preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", ["Perimeter", "Area"], ["BOMBAY", "CALI"])
+        preprocessing.split_data(40)
+        preprocessing.null_handel()
+        if self.algorithm_value.get()=="perceptron":
+            o = Perceptron(preprocessing,int( self.epochs_value.get()),float(self.learning_rate_entry.get()),self.bias_checkbox_value.get())
+            o.perceptron_train()
+            o.perceptron_test()
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)

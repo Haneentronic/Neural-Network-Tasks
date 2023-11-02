@@ -18,11 +18,13 @@ class PreProcessing:
     def read_data(self, filename, features, classes):
         self.x = pd.read_csv(filename)
         self.x = self.x.loc[self.x[self.x.columns[-1]].isin(classes)]
-        self.y = self.x.iloc[:, -1]
+        self.y = self.x.iloc[:, -1:]
         le = LabelEncoder()
         self.y = le.fit_transform(self.y.values)
         self.y = pd.DataFrame((self.y * 2) - 1)
-        self.x = self.x[features]
+        self.x = pd.DataFrame(self.x[features])
+
+
 
     def split_data(self, split_rate):
         self.x_train, self.x_test, self.y_train, self.y_test =\
@@ -35,6 +37,8 @@ class PreProcessing:
     def normalize_train_data(self):
         self.scaler = MinMaxScaler()
         self.x_train = self.scaler.fit_transform(self.x_train)
+        self.x_train = pd.DataFrame(self.x_train)
 
     def normalize_test_data(self):
         self.x_test = self.scaler.transform(self.x_test)
+        self.x_test = pd.DataFrame(self.x_test)
