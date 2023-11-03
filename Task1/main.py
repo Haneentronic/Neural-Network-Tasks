@@ -3,6 +3,22 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from Task1.preprocessing import PreProcessing
 from Task1.perceptron import Perceptron
+
+
+def run(algorithm_value, epochs_value, learning_rate_entry, bias_checkbox_value):
+    preprocessing = PreProcessing()
+    preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", ["Perimeter", "Area"], ["BOMBAY", "CALI"])
+    preprocessing.split_data(40)
+    preprocessing.null_handel()
+    if algorithm_value.get() == "perceptron":
+        o = Perceptron(preprocessing, int(epochs_value.get()), float(learning_rate_entry.get()),
+                       bias_checkbox_value.get())
+        o.perceptron_train()
+        o.perceptron_test()
+
+
+
+
 class task1:
     def __init__(self):
         self.mainColor = 'white'
@@ -36,16 +52,16 @@ class task1:
         self.select_feature_label = Label(self.root, image=self.select_feature_image, background=self.mainColor)
 
         # select features
-        self.area_checkbox_value = IntVar(value=-1)
+        self.area_checkbox_value = StringVar(value="None")
         self.area_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/area_on.png")
         self.area_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/area_off.png")
         self.area_checkbox = Checkbutton(self.root, variable=self.area_checkbox_value, background=self.mainColor,
                                          image=self.area_image_off, selectimage=self.area_image_on,
                                          activebackground=self.mainColor,
                                          foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                         onvalue=1, offvalue=0, command=self.update_features_checkbox)
+                                         onvalue="Area", offvalue="none", command=self.update_features_checkbox)
 
-        self.perimeter_checkbox_value = IntVar(value=-1)
+        self.perimeter_checkbox_value = StringVar(value="None")
         self.perimeter_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/perimeter_on.png")
         self.perimeter_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/perimeter_off.png")
         self.perimeter_checkbox = Checkbutton(self.root, variable=self.perimeter_checkbox_value,
@@ -53,9 +69,9 @@ class task1:
                                               image=self.perimeter_image_off, selectimage=self.perimeter_image_on,
                                               activebackground=self.mainColor,
                                               foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                              onvalue=1, offvalue=0, command=self.update_features_checkbox)
+                                              onvalue="Perimeter", offvalue="None", command=self.update_features_checkbox)
 
-        self.roundnes_checkbox_value = IntVar(value=-1)
+        self.roundnes_checkbox_value = StringVar(value="None")
         self.roundnes_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/roundnes_on.png")
         self.roundnes_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/roundnes_off.png")
         self.roundnes_checkbox = Checkbutton(self.root, variable=self.roundnes_checkbox_value,
@@ -63,9 +79,9 @@ class task1:
                                              image=self.roundnes_image_off, selectimage=self.roundnes_image_on,
                                              activebackground=self.mainColor,
                                              foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                             onvalue=1, offvalue=0, command=self.update_features_checkbox)
+                                             onvalue="roundnes", offvalue="None", command=self.update_features_checkbox)
 
-        self.major_checkbox_value = IntVar(value=-1)
+        self.major_checkbox_value = StringVar(value="None")
         self.major_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/major_on.png")
         self.major_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/major_off.png")
         self.major_checkbox = Checkbutton(self.root, variable=self.major_checkbox_value,
@@ -73,9 +89,9 @@ class task1:
                                           image=self.major_image_off, selectimage=self.major_image_on,
                                           activebackground=self.mainColor,
                                           foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                          onvalue=1, offvalue=0, command=self.update_features_checkbox)
+                                          onvalue="MajorAxisLength", offvalue="None", command=self.update_features_checkbox)
 
-        self.minor_checkbox_value = IntVar(value=-1)
+        self.minor_checkbox_value = StringVar(value="None")
         self.minor_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/minor_on.png")
         self.minor_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/minor_off.png")
         self.minor_checkbox = Checkbutton(self.root, variable=self.minor_checkbox_value,
@@ -83,41 +99,41 @@ class task1:
                                           image=self.minor_image_off, selectimage=self.minor_image_on,
                                           activebackground=self.mainColor,
                                           foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                          onvalue=1, offvalue=0, command=self.update_features_checkbox)
+                                          onvalue="MinorAxisLength", offvalue="None", command=self.update_features_checkbox)
 
         self.select_class = Image.open("../Neural-Project/Photos/Task1/select_classes.png")
         self.select_class_image = ImageTk.PhotoImage(self.select_class)
         self.select_class_label = Label(self.root, image=self.select_class_image, background=self.mainColor)
 
-        self.c1_checkbox_value = IntVar(value=-1)
-        self.c1_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/c1_on.png")
-        self.c1_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/c1_off.png")
-        self.c1_checkbox = Checkbutton(self.root, variable=self.c1_checkbox_value,
-                                       background=self.mainColor,
-                                       image=self.c1_image_off, selectimage=self.c1_image_on,
-                                       activebackground=self.mainColor,
-                                       foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2", onvalue=1,
-                                       offvalue=0, command=self.update_classes_checkbox)
+        self.bombay_checkbox_value = StringVar(value="None")
+        self.bombay_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/c1_on.png")
+        self.bombay_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/c1_off.png")
+        self.bombay_checkbox = Checkbutton(self.root, variable=self.bombay_checkbox_value,
+                                           background=self.mainColor,
+                                           image=self.bombay_image_off, selectimage=self.bombay_image_on,
+                                           activebackground=self.mainColor,
+                                           foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
+                                           onvalue="BOMBAY", offvalue="None", command=self.update_classes_checkbox)
 
-        self.c2_checkbox_value = IntVar(value=-1)
-        self.c2_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/c2_on.png")
-        self.c2_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/c2_off.png")
-        self.c2_checkbox = Checkbutton(self.root, variable=self.c2_checkbox_value,
-                                       background=self.mainColor,
-                                       image=self.c2_image_off, selectimage=self.c2_image_on,
-                                       activebackground=self.mainColor,
-                                       foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2", onvalue=1,
-                                       offvalue=0, command=self.update_classes_checkbox)
+        self.cali_checkbox_value = StringVar(value="None")
+        self.cali_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/c2_on.png")
+        self.cali_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/c2_off.png")
+        self.cali_checkbox = Checkbutton(self.root, variable=self.cali_checkbox_value,
+                                         background=self.mainColor,
+                                         image=self.cali_image_off, selectimage=self.cali_image_on,
+                                         activebackground=self.mainColor,
+                                         foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
+                                         onvalue="CALI", offvalue="None", command=self.update_classes_checkbox)
 
-        self.c3_checkbox_value = IntVar(value=-1)
-        self.c3_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/c3_on.png")
-        self.c3_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/c3_off.png")
-        self.c3_checkbox = Checkbutton(self.root, variable=self.c3_checkbox_value,
-                                       background=self.mainColor,
-                                       image=self.c3_image_off, selectimage=self.c3_image_on,
-                                       activebackground=self.mainColor,
-                                       foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2", onvalue=1,
-                                       offvalue=0, command=self.update_classes_checkbox)
+        self.sira_checkbox_value = StringVar(value="None")
+        self.sira_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/c3_on.png")
+        self.sira_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/c3_off.png")
+        self.sira_checkbox = Checkbutton(self.root, variable=self.sira_checkbox_value,
+                                         background=self.mainColor,
+                                         image=self.sira_image_off, selectimage=self.sira_image_on,
+                                         activebackground=self.mainColor,
+                                         foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
+                                         onvalue="SIRA", offvalue="None", command=self.update_classes_checkbox)
 
         self.learning_rate = Image.open("../Neural-Project/Photos/Task1/learning_rate.png")
         self.learning_rate_image = ImageTk.PhotoImage(self.learning_rate)
@@ -181,16 +197,9 @@ class task1:
 
         self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/run_btn.png")
         self.run_button = Button(self.root, image=self.run_button_image, borderwidth=0, cursor="hand2", bd=0,
-                                 background=self.mainColor, activebackground=self.mainColor,command=lambda:self.run())
-    def run(self):
-        preprocessing=PreProcessing()
-        preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", ["Perimeter", "Area"], ["BOMBAY", "CALI"])
-        preprocessing.split_data(40)
-        preprocessing.null_handel()
-        if self.algorithm_value.get()=="perceptron":
-            o = Perceptron(preprocessing,int( self.epochs_value.get()),float(self.learning_rate_entry.get()),self.bias_checkbox_value.get())
-            o.perceptron_train()
-            o.perceptron_test()
+                                 background=self.mainColor, activebackground=self.mainColor,
+                                 command=lambda: run(self.algorithm_value, self.epochs_value, self.learning_rate_entry,
+                                                     self.bias_checkbox_value))
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)
@@ -206,9 +215,9 @@ class task1:
 
         self.select_class_label.place(anchor='center', relx=0.3, y=260)
 
-        self.c1_checkbox.place(anchor='center', relx=0.14, y=295)
-        self.c2_checkbox.place(anchor='center', relx=0.24, y=295)
-        self.c3_checkbox.place(anchor='center', relx=0.34, y=295)
+        self.bombay_checkbox.place(anchor='center', relx=0.14, y=295)
+        self.cali_checkbox.place(anchor='center', relx=0.24, y=295)
+        self.sira_checkbox.place(anchor='center', relx=0.34, y=295)
 
         self.learning_rate_label.place(anchor='center', relx=0.22, y=350)
         self.learning_rate_image_entry.place(anchor='center', relx=0.415, y=350)
@@ -232,48 +241,48 @@ class task1:
 
     def update_classes_checkbox(self):
         i = 0
-        if self.c1_checkbox_value.get() == 1:
+        if self.bombay_checkbox_value.get() == "BOMBAY":
             i = i + 1
-        if self.c2_checkbox_value.get() == 1:
+        if self.cali_checkbox_value.get() == "CALI":
             i = i + 1
-        if self.c3_checkbox_value.get() == 1:
+        if self.sira_checkbox_value.get() == "SIRA":
             i = i + 1
 
         if i >= 2:
-            if self.c1_checkbox_value.get() != 1:
-                self.c1_checkbox.config(state="disabled")
-            if self.c2_checkbox_value.get() != 1:
-                self.c2_checkbox.config(state="disabled")
-            if self.c3_checkbox_value.get() != 1:
-                self.c3_checkbox.config(state="disabled")
+            if self.bombay_checkbox_value.get() != "BOMBAY":
+                self.bombay_checkbox.config(state="disabled")
+            if self.cali_checkbox_value.get() != "CALI":
+                self.cali_checkbox.config(state="disabled")
+            if self.sira_checkbox_value.get() != "SIRA":
+                self.sira_checkbox.config(state="disabled")
 
         else:
-            self.c1_checkbox.config(state="normal")
-            self.c2_checkbox.config(state="normal")
-            self.c3_checkbox.config(state="normal")
+            self.bombay_checkbox.config(state="normal")
+            self.cali_checkbox.config(state="normal")
+            self.sira_checkbox.config(state="normal")
 
     def update_features_checkbox(self):
         i = 0
-        if self.area_checkbox_value.get() == 1:
+        if self.area_checkbox_value.get() == "Area":
             i = i + 1
-        if self.perimeter_checkbox_value.get() == 1:
+        if self.perimeter_checkbox_value.get() == "Perimeter":
             i = i + 1
-        if self.roundnes_checkbox_value.get() == 1:
+        if self.roundnes_checkbox_value.get() == "roundnes":
             i = i + 1
-        if self.major_checkbox_value.get() == 1:
+        if self.major_checkbox_value.get() == "MajorAxisLength":
             i = i + 1
-        if self.minor_checkbox_value.get() == 1:
+        if self.minor_checkbox_value.get() == "MinorAxisLength":
             i = i + 1
         if i >= 2:
-            if self.area_checkbox_value.get() != 1:
+            if self.area_checkbox_value.get() != "Area":
                 self.area_checkbox.config(state="disabled")
-            if self.perimeter_checkbox_value.get() != 1:
+            if self.perimeter_checkbox_value.get() != "Perimeter":
                 self.perimeter_checkbox.config(state="disabled")
-            if self.roundnes_checkbox_value.get() != 1:
+            if self.roundnes_checkbox_value.get() != "roundnes":
                 self.roundnes_checkbox.config(state="disabled")
-            if self.major_checkbox_value.get() != 1:
+            if self.major_checkbox_value.get() != "MajorAxisLength":
                 self.major_checkbox.config(state="disabled")
-            if self.minor_checkbox_value.get() != 1:
+            if self.minor_checkbox_value.get() != "MinorAxisLength":
                 self.minor_checkbox.config(state="disabled")
         else:
             self.area_checkbox.config(state="normal")
@@ -281,5 +290,3 @@ class task1:
             self.roundnes_checkbox.config(state="normal")
             self.major_checkbox.config(state="normal")
             self.minor_checkbox.config(state="normal")
-
-

@@ -24,11 +24,9 @@ class PreProcessing:
         self.y = pd.DataFrame((self.y * 2) - 1)
         self.x = pd.DataFrame(self.x[features])
 
-
-
     def split_data(self, split_rate):
-        self.x_train, self.x_test, self.y_train, self.y_test =\
-            train_test_split(self.x, self.y, test_size=split_rate/100, stratify=self.y)
+        self.x_train, self.x_test, self.y_train, self.y_test = \
+            train_test_split(self.x, self.y, test_size=split_rate / 100, stratify=self.y)
 
     def null_handel(self):
         if 'MinorAxisLength' in self.x_train.columns:
