@@ -5,20 +5,6 @@ from Task1.preprocessing import PreProcessing
 from Task1.perceptron import Perceptron
 
 
-def run(algorithm_value, epochs_value, learning_rate_entry, bias_checkbox_value):
-    preprocessing = PreProcessing()
-    preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", ["Perimeter", "Area"], ["BOMBAY", "CALI"])
-    preprocessing.split_data(40)
-    preprocessing.null_handel()
-    if algorithm_value.get() == "perceptron":
-        o = Perceptron(preprocessing, int(epochs_value.get()), float(learning_rate_entry.get()),
-                       bias_checkbox_value.get())
-        o.perceptron_train()
-        o.perceptron_test()
-
-
-
-
 class task1:
     def __init__(self):
         self.mainColor = 'white'
@@ -59,7 +45,7 @@ class task1:
                                          image=self.area_image_off, selectimage=self.area_image_on,
                                          activebackground=self.mainColor,
                                          foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                         onvalue="Area", offvalue="none", command=self.update_features_checkbox)
+                                         onvalue="Area", offvalue="None", command=self.update_features_checkbox)
 
         self.perimeter_checkbox_value = StringVar(value="None")
         self.perimeter_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/perimeter_on.png")
@@ -198,8 +184,36 @@ class task1:
         self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/run_btn.png")
         self.run_button = Button(self.root, image=self.run_button_image, borderwidth=0, cursor="hand2", bd=0,
                                  background=self.mainColor, activebackground=self.mainColor,
-                                 command=lambda: run(self.algorithm_value, self.epochs_value, self.learning_rate_entry,
-                                                     self.bias_checkbox_value))
+                                 command=lambda: self.run())
+
+    def run(self):
+        features_list = []
+        if self.area_checkbox_value.get() != "None":
+            features_list.append(self.area_checkbox_value.get())
+        if self.perimeter_checkbox_value.get() != "None":
+            features_list.append(self.perimeter_checkbox_value.get())
+        if self.roundnes_checkbox_value.get() != "None":
+            features_list.append(self.roundnes_checkbox_value.get())
+        if self.major_checkbox_value.get() != "None":
+            features_list.append(self.major_checkbox_value.get())
+        if self.minor_checkbox_value.get() != "None":
+            features_list.append(self.minor_checkbox_value.get())
+        class_list = []
+        if self.bombay_checkbox_value.get() != "None":
+            class_list.append(self.bombay_checkbox_value.get())
+        if self.cali_checkbox_value.get() != "None":
+            class_list.append(self.cali_checkbox_value.get())
+        if self.sira_checkbox_value.get() != "None":
+            class_list.append(self.sira_checkbox_value.get())
+        preprocessing = PreProcessing()
+        preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", features_list, class_list)
+        preprocessing.split_data(40)
+        preprocessing.null_handel()
+        if self.algorithm_value.get() == "perceptron":
+            o = Perceptron(preprocessing, int(self.epochs_value.get()), float(self.learning_rate_entry.get()),
+                           self.bias_checkbox_value.get())
+            o.perceptron_train()
+            o.perceptron_test()
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)
