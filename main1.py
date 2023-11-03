@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
-from Task1.main import Task1
+from Task1.main import task1
 
 
 def open_task(root, page):
@@ -31,7 +31,7 @@ class MainScreen:
 
         task1_button_image = PhotoImage(file="Photos/task1_btn.png")
         task1_button = Button(root, image=task1_button_image, borderwidth=0, cursor="hand2", bd=0,
-                              background=mainColor, activebackground=mainColor, command=lambda: open_task(root, Task1))
+                              background=mainColor, activebackground=mainColor, command=lambda: open_task(root, task1))
 
 
         # Placing widgets on the screen

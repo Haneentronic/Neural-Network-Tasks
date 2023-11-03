@@ -1,11 +1,9 @@
 from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
-
 from Task1.preprocessing import PreProcessing
 from Task1.perceptron import Perceptron
-
-class Task1:
+class task1:
     def __init__(self):
         self.mainColor = 'white'
         self.foregroundColor = '#FF8888'

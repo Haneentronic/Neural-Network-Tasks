@@ -2,7 +2,8 @@ import numpy as np
 import random
 import pandas as pd
 import matplotlib.pyplot as plt
-from preprocessing import PreProcessing
+from Task1.preprocessing import PreProcessing
+
 
 
 class Perceptron:
