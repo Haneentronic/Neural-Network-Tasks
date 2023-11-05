@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def perceptron_test(self):
+def test(self):
     self.prediction = np.array(np.sign(np.dot(self.data.x_test, self.w.T)))
 
 

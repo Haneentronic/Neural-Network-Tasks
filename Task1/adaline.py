@@ -2,7 +2,7 @@ from .preprocessing import PreProcessing
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from .test import perceptron_test
+from .test import test
 from .test import ploting
 from .test import confusion_matrix
 from .test import accuracy_score
@@ -77,7 +77,7 @@ class Adaline:
             iterations -= 1
 
     def adaline_testt(self):
-        perceptron_test(self)
+        test(self)
 
     def plotingg(self):
         ploting(self)

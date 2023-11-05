@@ -3,7 +3,7 @@ import random
 import pandas as pd
 import matplotlib.pyplot as plt
 from .preprocessing import PreProcessing
-from .test import perceptron_test
+from .test import test
 from .test import ploting
 from .test import confusion_matrix
 from .test import accuracy_score
@@ -34,7 +34,7 @@ class Perceptron:
 
     def perceptron_testt(self):
         #self.prediction = np.array(np.sign(np.dot(self.data.x_test, self.w.T)))
-        perceptron_test(self)
+        test(self)
 
 
     def plotingg(self):
