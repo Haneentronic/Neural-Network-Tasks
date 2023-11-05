@@ -1,5 +1,4 @@
-from preprocessing import PreProcessing
-from main import *
+from .preprocessing import PreProcessing
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -77,7 +76,7 @@ class Adaline:
 
             iterations -= 1
 
-    def perceptron_testt(self):
+    def adaline_testt(self):
         perceptron_test(self)
 
     def plotingg(self):
