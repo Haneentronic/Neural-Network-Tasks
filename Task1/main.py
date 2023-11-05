@@ -1,8 +1,8 @@
 from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
-from Task1.preprocessing import PreProcessing
-from Task1.perceptron import Perceptron
+from .preprocessing import PreProcessing
+from .perceptron import Perceptron
 
 
 class task1:
@@ -213,7 +213,7 @@ class task1:
             o = Perceptron(preprocessing, int(self.epochs_value.get()), float(self.learning_rate_entry.get()),
                            self.bias_checkbox_value.get())
             o.perceptron_train()
-            o.perceptron_test()
+            o.perceptron_testt()
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)

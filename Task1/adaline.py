@@ -3,6 +3,10 @@ from main import *
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from .test import perceptron_test
+from .test import ploting
+from .test import confusion_matrix
+from .test import accuracy_score
 
 
 class Adaline:
@@ -58,10 +62,11 @@ class Adaline:
                 prediction = np.dot(self.weights, values)
 
                 # get predict class using signum function
-                predicted_class = np.where(prediction >= 0, 1, -1)
+                #predicted_class = np.where(prediction >= 0, 1, -1)
 
                 # calc error
-                error = actual_class - predicted_class
+                #error = actual_class - predicted_class
+                error = actual_class - prediction
                 error = error * error
                 sum_error += error
 
@@ -72,8 +77,14 @@ class Adaline:
 
             iterations -= 1
 
-    def test(self, x_test, y_test):
-        pass
-        # Mariam, code here. Delete pass and do art
+    def perceptron_testt(self):
+        perceptron_test(self)
 
+    def plotingg(self):
+        ploting(self)
 
+    def confusion_matrixx(self):
+        confusion_matrix(self)
+
+    def accuracy_scoree(self):
+        accuracy_score(self)
