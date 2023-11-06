@@ -75,16 +75,33 @@ class Adaline:
         y_pred = np.array(y_pred)
         y_test = y_test.values
 
+        true_positive = 0
+        false_positive = 0
+        true_negative = 0
+        false_negative = 0
+
         # calculate the confusion matrix
 
-        true_positive = np.sum((y_test == 1) & (y_pred == 1))
-        false_positive = np.sum((y_test == -1) & y_pred == 1)
-        true_negative = np.sum((y_test == -1) & (y_pred == -1))
-        false_negative = np.sum((y_test == 1) & (y_pred == -1))
+        for i,j in zip(y_test,y_pred):
+            if i == 1 & j == 1:
+                true_positive += 1
+            if i == -1 & j == 1:
+                false_negative += 1
+            if i == -1 & j == -1:
+                true_negative += 1
+            if i == 1 & j == -1:
+                false_negative += 1
+
+        # true_positive = np.sum((y_test == 1) & (y_pred == 1))
+        # false_positive = np.sum((y_test == -1) & y_pred == 1)
+        # true_negative = np.sum((y_test == -1) & (y_pred == -1))
+        # false_negative = np.sum((y_test == 1) & (y_pred == -1))
+
+        confusion_matrix = np.array([[true_positive, false_positive], [false_negative, true_negative]])
+
 
         # calculate accuracy
         accuracy = (true_positive + true_negative) / num_of_samples
-        confusion_matrix = np.array([[true_positive, false_positive], [false_negative, true_negative]])
 
         # for console testing
 
