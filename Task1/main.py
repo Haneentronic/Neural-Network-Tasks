@@ -1,8 +1,8 @@
 from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
-from .preprocessing import PreProcessing
-from .perceptron import Perceptron
+from Task1.preprocessing import PreProcessing
+from Task1.perceptron import Perceptron
 
 
 class task1:

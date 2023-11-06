@@ -26,7 +26,7 @@ class PreProcessing:
 
     def split_data(self, split_rate):
         self.x_train, self.x_test, self.y_train, self.y_test = \
-            train_test_split(self.x, self.y, test_size=split_rate / 100, stratify=self.y)
+            train_test_split(self.x, self.y, test_size=split_rate / 100, stratify=self.y ,random_state=42 )
 
         # Convert the arrays back to DataFrames
         self.x_train = pd.DataFrame(self.x_train)
