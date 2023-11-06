@@ -28,9 +28,6 @@ class Perceptron:
                     loss = self.data.y_train.iloc[i, -1] - y
                     self.w = self.w + (np.dot(loss * self.learningrate, self.data.x_train.iloc[i, :]))
 
-                # print(loss)
-                # print(y)
-                # print(self.data.y_train.iloc[i, :])
 
     def perceptron_testt(self):
         self.prediction = np.array(np.sign(np.dot(self.data.x_test, self.w.T)))
@@ -84,33 +81,33 @@ class Perceptron:
         plt.show()
 
 
-preprocessing = PreProcessing()
-preprocessing.read_data("Dry_Bean_Dataset.csv", ["Perimeter", "MinorAxisLength"], ["BOMBAY", "CALI"])
-preprocessing.split_data(40)
-preprocessing.null_handel()
-preprocessing.normalize_train_data()
-preprocessing.normalize_test_data()
-# Calculate the correlation matrix
-# Load your dataset into a DataFrame
-data = pd.read_csv('Dry_Bean_Dataset.csv')
-le = LabelEncoder()
-data.iloc[:,-1] = le.fit_transform(data.iloc[:,-1])
-correlation_matrix = data.corr()
-
-# Create a heatmap of the correlation matrix
-plt.figure(figsize=(12, 8))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
-plt.title("Feature Correlation Matrix")
-plt.show()
-
-o = Perceptron(preprocessing, 5000, 0.1, 1)
-o.perceptron_train()
-o.perceptron_testt()
-
-print(type(np.array(o.data.y_test.loc[:,0])))
-# print(type(o.prediction))
-print(o.confusion_matrixx())
-print(o.accuracy_scoree())
-o.plotingg()
-classes=['BOMBAY', 'CALI']
-o.plot_confusion_matrix(o.confusion_matrixx(),classes)
+# preprocessing = PreProcessing()
+# preprocessing.read_data("Dry_Bean_Dataset.csv", ["Perimeter", "MinorAxisLength"], ["BOMBAY", "CALI"])
+# preprocessing.split_data(40)
+# preprocessing.null_handel()
+# preprocessing.normalize_train_data()
+# preprocessing.normalize_test_data()
+# # Calculate the correlation matrix
+# # Load your dataset into a DataFrame
+# data = pd.read_csv('Dry_Bean_Dataset.csv')
+# le = LabelEncoder()
+# data.iloc[:,-1] = le.fit_transform(data.iloc[:,-1])
+# correlation_matrix = data.corr()
+#
+# # Create a heatmap of the correlation matrix
+# plt.figure(figsize=(12, 8))
+# sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+# plt.title("Feature Correlation Matrix")
+# plt.show()
+#
+# o = Perceptron(preprocessing, 5000, 0.1, 1)
+# o.perceptron_train()
+# o.perceptron_testt()
+#
+# print(type(np.array(o.data.y_test.loc[:,0])))
+# # print(type(o.prediction))
+# print(o.confusion_matrixx())
+# print(o.accuracy_scoree())
+# o.plotingg()
+# classes=['BOMBAY', 'CALI']
+# o.plot_confusion_matrix(o.confusion_matrixx(),classes)
