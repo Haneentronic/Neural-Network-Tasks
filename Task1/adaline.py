@@ -2,7 +2,6 @@ from preprocessing import PreProcessing
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import test
 
 
 class Adaline:
@@ -61,20 +60,41 @@ class Adaline:
 
             iterations -= 1
 
-    def adaline_test(self):
-        test.test(self)
+    def adaline_test(self,x_test,y_test,bias):
+        num_of_samples = x_test.shape[0]
+        y_pred = []
 
-    def ploting(self):
-        test.ploting(self)
+        if bias:
+            x_test.insert(0,'x0',1)
 
-    def confusion_matrix(self):
-        test.confusion_matrix(self)
+        for i in range(num_of_samples):
+            values = x_test.iloc[i].values
+            pred = np.dot(self.weights, values)
+            y_pred.append(1 if pred >= 0 else -1)
 
-    def accuracy_score(self):
-        test.accuracy_score(self)
+        y_pred = np.array(y_pred)
+        y_test = y_test.values
+
+        # calculate the confusion matrix
+
+        true_positive = np.sum((y_test == 1) & (y_pred == 1))
+        false_positive = np.sum((y_test == -1) & y_pred == 1)
+        true_negative = np.sum((y_test == -1) & (y_pred == -1))
+        false_negative = np.sum((y_test == 1) & (y_pred == -1))
+
+        # calculate accuracy
+        accuracy = (true_positive + true_negative) / num_of_samples
+        confusion_matrix = np.array([[true_positive, false_positive], [false_negative, true_negative]])
+
+        # for console testing
+
+        # print(accuracy)
+        # print("********************************")
+        # print(confusion_matrix)
 
 
 # CONSOLE TEST
+
 # ft = ["Area", "Perimeter"]
 # cls = ["BOMBAY", "CALI"]
 # pre = PreProcessing()
@@ -92,3 +112,5 @@ class Adaline:
 # ad = Adaline()
 # ad.train(x_train, y_train, 1, 0.1, 0.01)
 # print(ad.mse)
+# ad.adaline_test(x_test,y_test,1)
+
