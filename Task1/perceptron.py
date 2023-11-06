@@ -2,11 +2,11 @@ import numpy as np
 import random
 import pandas as pd
 import matplotlib.pyplot as plt
-from .preprocessing import PreProcessing
-from .test import test
-from .test import ploting
-from .test import confusion_matrix
-from .test import accuracy_score
+from preprocessing import PreProcessing
+from test import test
+from test import ploting
+from test import confusion_matrix
+from test import accuracy_score
 
 
 class Perceptron:
@@ -75,15 +75,15 @@ class Perceptron:
         #return accuracy
 
 
-# preprocessing = PreProcessing()
-# preprocessing.read_data("Dry_Bean_Dataset.csv", ["Perimeter", "Area"], ["BOMBAY", "CALI"])
-# preprocessing.split_data(40)
-# preprocessing.null_handel()
-# o = Perceptron(preprocessing, 100, 0.1, 0)
-# o.perceptron_train()
-# o.perceptron_test()
-# # o.confusion_matrix(o.data.y_test,o.prediction)
-# print(type(np.array(o.data.y_test.loc[:,0])))
+preprocessing = PreProcessing()
+preprocessing.read_data("Dry_Bean_Dataset.csv", ["Perimeter", "Area"], ["BOMBAY", "CALI"])
+preprocessing.split_data(40)
+preprocessing.null_handel()
+o = Perceptron(preprocessing, 100, 0.1, 0)
+o.perceptron_train()
+o.perceptron_testt()
+o.confusion_matrixx(o.data.y_test,o.prediction)
+print(type(np.array(o.data.y_test.loc[:,0])))
 # print(type(o.prediction))
 # print(o.confusion_matrix())
 # print(o.accuracy_score())

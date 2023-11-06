@@ -18,7 +18,7 @@ class PreProcessing:
     def read_data(self, filename, features, classes):
         self.x = pd.read_csv(filename)
         self.x = self.x.loc[self.x[self.x.columns[-1]].isin(classes)]
-        self.y = self.x.iloc[:, -1:]
+        self.y = self.x.iloc[:, -1]
         le = LabelEncoder()
         self.y = le.fit_transform(self.y.values)
         self.y = pd.DataFrame((self.y * 2) - 1)
@@ -27,6 +27,12 @@ class PreProcessing:
     def split_data(self, split_rate):
         self.x_train, self.x_test, self.y_train, self.y_test = \
             train_test_split(self.x, self.y, test_size=split_rate / 100, stratify=self.y)
+
+        # Convert the arrays back to DataFrames
+        self.x_train = pd.DataFrame(self.x_train)
+        self.x_test = pd.DataFrame(self.x_test)
+        self.y_train = pd.DataFrame(self.y_train)
+        self.y_test = pd.DataFrame(self.y_test)
 
     def null_handel(self):
         if 'MinorAxisLength' in self.x_train.columns:
