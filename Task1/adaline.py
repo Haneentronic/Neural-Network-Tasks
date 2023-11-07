@@ -1,6 +1,8 @@
 from Task1.preprocessing import PreProcessing
 import numpy as np
 import pandas as pd
+import seaborn as sns
+from preprocessing import PreProcessing
 import matplotlib.pyplot as plt
 
 
@@ -53,7 +55,7 @@ class Adaline:
 
             mse = (1 / num_samples) * sum_error
             mse = np.round(mse, 2)
-            print("mse", mse)
+            # print("mse", mse)
             self.mse = mse
             if mse <= threshold or iterations == 0:
                 break
@@ -85,17 +87,16 @@ class Adaline:
         for i,j in zip(y_test,y_pred):
             if i == 1 & j == 1:
                 true_positive += 1
+                continue
             if i == -1 & j == 1:
                 false_negative += 1
+                continue
             if i == -1 & j == -1:
                 true_negative += 1
+                continue
             if i == 1 & j == -1:
                 false_negative += 1
-
-        # true_positive = np.sum((y_test == 1) & (y_pred == 1))
-        # false_positive = np.sum((y_test == -1) & y_pred == 1)
-        # true_negative = np.sum((y_test == -1) & (y_pred == -1))
-        # false_negative = np.sum((y_test == 1) & (y_pred == -1))
+                continue
 
         confusion_matrix = np.array([[true_positive, false_positive], [false_negative, true_negative]])
 
@@ -104,25 +105,14 @@ class Adaline:
         accuracy = (true_positive + true_negative) / num_of_samples
         print("accuracy", accuracy)
 
+        print(accuracy)
+        print("********************************")
+        print(confusion_matrix)
 
-# # CONSOLE TEST
-# ft = ["MajorAxisLength", "MinorAxisLength"]
-# cls = ["BOMBAY", "SIRA"]
-# pre = PreProcessing()
-# pre.read_data("Dry_Bean_Dataset.csv", ft, cls)
-#
-# pre.split_data(40)
-# pre.null_handel()
-# pre.normalize_train_data()
-#
-# x_train = pre.x_train
-# y_train = pre.y_train
-#
-# x_test = pre.x_test
-# y_test = pre.y_test
-#
-# ad = Adaline()
-# ad.train(x_train, y_train, 1, 0.1, 0.01)
-# print(ad.mse)
-# ad.adaline_test(x_test,y_test,1)
-#
+        # confusion matrix plotting
+
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(confusion_matrix, annot=True, fmt='.2f', cmap='Reds',)
+        plt.title('Confusion Matrix')
+        plt.show()
+
