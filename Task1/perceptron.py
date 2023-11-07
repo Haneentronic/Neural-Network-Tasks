@@ -65,8 +65,8 @@ class Perceptron:
         return accuracy
 
     def ploting(self):
-        plt.scatter(self.data.x_test.iloc[:, 0], self.data.x_test.iloc[:, 1], c=self.data.y_test.iloc[:, -1])
-        x = np.linspace(self.data.x_test.iloc[:, 0].min(), self.data.x_test.iloc[:, 0].max(), 100)
+        plt.scatter(self.data.x_train.iloc[:, 0], self.data.x_train.iloc[:, 1], c=self.data.y_train.iloc[:, -1])
+        x = np.linspace(self.data.x_train.iloc[:, 0].min(), self.data.x_train.iloc[:, 0].max(), 100)
         y = -(self.w[0] * x + self.bais) / self.w[1]
         plt.plot(x, y, color='red')
         plt.show()
