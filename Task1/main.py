@@ -216,18 +216,21 @@ class task1:
             o.perceptron_train()
             o.perceptron_test()
             print("Perceptron Accuracy: ", o.accuracy_score())
+            print("-------------")
             o.plot_confusion_matrix(o.confusion_matrix(),class_list)
             o.ploting()
 
         elif self.algorithm_value.get() == "adaline":
             preprocessing.normalize_train_data()
+            preprocessing.normalize_test_data()
             adaline = Adaline()
 
             adaline.train(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get()
                           , float(self.learning_rate_entry.get()), float(self.mse_entry.get()))
+            print("Adaline Training is Complete with mse: ", adaline.mse)
 
             adaline.test(preprocessing.x_test, preprocessing.y_test, self.bias_checkbox_value.get())
-
+            print("-------------")
 
 
 
