@@ -222,14 +222,15 @@ class task1:
 
         elif self.algorithm_value.get() == "adaline":
             preprocessing.normalize_train_data()
+            preprocessing.normalize_test_data()
             adaline = Adaline()
 
             adaline.train(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get()
                           , float(self.learning_rate_entry.get()), float(self.mse_entry.get()))
             print("Adaline Training is Complete with mse: ", adaline.mse)
+
             adaline.test(preprocessing.x_test, preprocessing.y_test, self.bias_checkbox_value.get())
             print("-------------")
-
 
 
 
