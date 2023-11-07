@@ -3,7 +3,6 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from Task1.main import task1
 
-
 def open_task(root, page):
     root.destroy()
     page()

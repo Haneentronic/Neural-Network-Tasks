@@ -2,7 +2,6 @@ from Task1.preprocessing import PreProcessing
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from preprocessing import PreProcessing
 import matplotlib.pyplot as plt
 
 
@@ -55,7 +54,7 @@ class Adaline:
 
             mse = (1 / num_samples) * sum_error
             mse = np.round(mse, 2)
-            # print("mse", mse)
+
             self.mse = mse
             if mse <= threshold or iterations == 0:
                 break
@@ -100,19 +99,15 @@ class Adaline:
 
         confusion_matrix = np.array([[true_positive, false_positive], [false_negative, true_negative]])
 
-        # CONSOLE TEST
-        print("confusion_matrix\n", confusion_matrix)
+        # CONSOLE
         accuracy = (true_positive + true_negative) / num_of_samples
-        print("accuracy", accuracy)
+        print("Adaline Accuracy", accuracy)
 
-        print(accuracy)
-        print("********************************")
-        print(confusion_matrix)
-
-        # confusion matrix plotting
-
+        # GUI -> Confusion matrix plotting
         plt.figure(figsize=(8, 6))
         sns.heatmap(confusion_matrix, annot=True, fmt='.2f', cmap='Reds',)
-        plt.title('Confusion Matrix')
+        plt.xlabel('Predicted')
+        plt.ylabel('True')
+        plt.title('Adaline Confusion Matrix')
         plt.show()
 

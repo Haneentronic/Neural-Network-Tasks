@@ -77,7 +77,7 @@ class Perceptron:
                     xticklabels=class_names, yticklabels=class_names)
         plt.xlabel('Predicted')
         plt.ylabel('True')
-        plt.title('Confusion Matrix')
+        plt.title('Perceptron Confusion Matrix')
         plt.show()
 
 
