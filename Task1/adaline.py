@@ -21,7 +21,7 @@ class Adaline:
             x_train.insert(0, 'x0', 1)
 
         # adaline algorithm
-        iterations = 1000
+        iterations = 500
         while True:
             for i in range(0, num_samples):
                 # get actual class
@@ -110,4 +110,3 @@ class Adaline:
         plt.ylabel('True')
         plt.title('Adaline Confusion Matrix')
         plt.show()
-
