@@ -213,7 +213,12 @@ class task1:
             o = Perceptron(preprocessing, int(self.epochs_value.get()), float(self.learning_rate_entry.get()),
                            self.bias_checkbox_value.get())
             o.perceptron_train()
-            o.perceptron_testt()
+            o.perceptron_test()
+            print(o.accuracy_score())
+            o.plot_confusion_matrix(o.confusion_matrix(),class_list)
+            o.ploting()
+
+
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)

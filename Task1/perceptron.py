@@ -2,7 +2,7 @@ import numpy as np
 import random
 import pandas as pd
 import matplotlib.pyplot as plt
-from preprocessing import PreProcessing
+from Task1.preprocessing import PreProcessing
 from sklearn.preprocessing import LabelEncoder
 import seaborn as sns
 class Perceptron:
@@ -29,13 +29,13 @@ class Perceptron:
                     self.w = self.w + (np.dot(loss * self.learningrate, self.data.x_train.iloc[i, :]))
 
 
-    def perceptron_testt(self):
+    def perceptron_test(self):
         self.prediction = np.array(np.sign(np.dot(self.data.x_test, self.w.T)))
         self.y_true = np.array(self.data.y_test.iloc[:, -1])
 
 
 
-    def confusion_matrixx(self):
+    def confusion_matrix(self):
         # Get the unique classes excluding NaN
         unique_classes = np.unique(np.concatenate((self.y_true[~np.isnan(self.y_true)], self.prediction[~np.isnan(self.prediction)])))
 
@@ -52,7 +52,7 @@ class Perceptron:
         # print(self.prediction)
         return cm
 
-    def accuracy_scoree(self):
+    def accuracy_score(self):
         # Calculate the number of correct predictions
         correct = sum(self.y_true == self.prediction)
 
@@ -64,7 +64,7 @@ class Perceptron:
 
         return accuracy
 
-    def plotingg(self):
+    def ploting(self):
         plt.scatter(self.data.x_test.iloc[:, 0], self.data.x_test.iloc[:, 1], c=self.data.y_test.iloc[:, -1])
         x = np.linspace(self.data.x_test.iloc[:, 0].min(), self.data.x_test.iloc[:, 0].max(), 100)
         y = -(self.w[0] * x + self.bais) / self.w[1]
@@ -95,19 +95,19 @@ class Perceptron:
 # correlation_matrix = data.corr()
 #
 # # Create a heatmap of the correlation matrix
-# plt.figure(figsize=(12, 8))
-# sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
-# plt.title("Feature Correlation Matrix")
-# plt.show()
+# # plt.figure(figsize=(12, 8))
+# # sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+# # plt.title("Feature Correlation Matrix")
+# # plt.show()
 #
 # o = Perceptron(preprocessing, 5000, 0.1, 1)
 # o.perceptron_train()
 # o.perceptron_testt()
-#
-# print(type(np.array(o.data.y_test.loc[:,0])))
-# # print(type(o.prediction))
-# print(o.confusion_matrixx())
-# print(o.accuracy_scoree())
-# o.plotingg()
-# classes=['BOMBAY', 'CALI']
+# #
+# # print(type(np.array(o.data.y_test.loc[:,0])))
+# # # print(type(o.prediction))
+# # print(o.confusion_matrixx())
+# # print(o.accuracy_scoree())
+# # o.plotingg()
+# # classes=['BOMBAY', 'CALI']
 # o.plot_confusion_matrix(o.confusion_matrixx(),classes)
