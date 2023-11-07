@@ -3,7 +3,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from Task1.preprocessing import PreProcessing
 from Task1.perceptron import Perceptron
-
+from Task1.adaline import Adaline
 
 class task1:
     def __init__(self):
@@ -209,14 +209,25 @@ class task1:
         preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", features_list, class_list)
         preprocessing.split_data(40)
         preprocessing.null_handel()
+
         if self.algorithm_value.get() == "perceptron":
             o = Perceptron(preprocessing, int(self.epochs_value.get()), float(self.learning_rate_entry.get()),
                            self.bias_checkbox_value.get())
             o.perceptron_train()
             o.perceptron_test()
-            print(o.accuracy_score())
+            print("Perceptron Accuracy: ", o.accuracy_score())
             o.plot_confusion_matrix(o.confusion_matrix(),class_list)
             o.ploting()
+
+        elif self.algorithm_value.get() == "adaline":
+            preprocessing.normalize_train_data()
+            adaline = Adaline()
+
+            adaline.train(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get()
+                          , float(self.learning_rate_entry.get()), float(self.mse_entry.get()))
+
+            adaline.test(preprocessing.x_test, preprocessing.y_test, self.bias_checkbox_value.get())
+
 
 
 

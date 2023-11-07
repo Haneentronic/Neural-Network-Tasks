@@ -37,6 +37,7 @@ class PreProcessing:
     def null_handel(self):
         if 'MinorAxisLength' in self.x_train.columns:
             self.x_train.fillna(np.mean(self.x_train['MinorAxisLength']), inplace=True)
+            self.x_train = pd.DataFrame(self.x_train)
 
     def normalize_train_data(self):
         self.scaler = MinMaxScaler()

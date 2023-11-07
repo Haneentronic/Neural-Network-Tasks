@@ -1,4 +1,4 @@
-from preprocessing import PreProcessing
+from Task1.preprocessing import PreProcessing
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -60,7 +60,7 @@ class Adaline:
 
             iterations -= 1
 
-    def adaline_test(self,x_test,y_test,bias):
+    def test(self, x_test, y_test, bias):
         num_of_samples = x_test.shape[0]
         y_pred = []
 
@@ -99,25 +99,20 @@ class Adaline:
 
         confusion_matrix = np.array([[true_positive, false_positive], [false_negative, true_negative]])
 
-
-        # calculate accuracy
+        # CONSOLE TEST
+        print("confusion_matrix\n", confusion_matrix)
         accuracy = (true_positive + true_negative) / num_of_samples
-
-        # for console testing
-
-        # print(accuracy)
-        # print("********************************")
-        # print(confusion_matrix)
+        print("accuracy", accuracy)
 
 
-# CONSOLE TEST
-
-# ft = ["Area", "Perimeter"]
-# cls = ["BOMBAY", "CALI"]
+# # CONSOLE TEST
+# ft = ["MajorAxisLength", "MinorAxisLength"]
+# cls = ["BOMBAY", "SIRA"]
 # pre = PreProcessing()
 # pre.read_data("Dry_Bean_Dataset.csv", ft, cls)
 #
 # pre.split_data(40)
+# pre.null_handel()
 # pre.normalize_train_data()
 #
 # x_train = pre.x_train
@@ -130,4 +125,4 @@ class Adaline:
 # ad.train(x_train, y_train, 1, 0.1, 0.01)
 # print(ad.mse)
 # ad.adaline_test(x_test,y_test,1)
-
+#
