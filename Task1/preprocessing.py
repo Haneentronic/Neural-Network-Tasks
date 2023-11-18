@@ -39,6 +39,7 @@ class PreProcessing:
             self.x_train.fillna(np.mean(self.x_train['MinorAxisLength']), inplace=True)
             self.x_train = pd.DataFrame(self.x_train)
 
+
     def normalize_train_data(self):
         self.scaler = MinMaxScaler()
         self.x_train = self.scaler.fit_transform(self.x_train)
