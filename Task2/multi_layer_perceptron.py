@@ -12,18 +12,14 @@ class NeuralNetwork:
         self.epochs = epochs
         self.weights, self.bias = self._initialize_weights_and_bias()
 
-    def initialize_weights_and_bias(input_size, hidden_layers, neurons_hidden):
+    def _initialize_weights_and_bias(self):
         weights = []
         bias = []
+        layer_sizes = [self.input_size] + self.neurons_hidden
 
-        # Input to first hidden layer
-        weights.append(np.random.rand(input_size, neurons_hidden[0]))
-        bias.append(np.random.rand(neurons_hidden[0]))
-
-        # Hidden layers
-        for i in range(len(neurons_hidden) - 1):
-            weights.append(np.random.rand(neurons_hidden[i], neurons_hidden[i + 1]))
-            bias.append(np.random.rand(neurons_hidden[i + 1]))
+        for i in range(len(layer_sizes) - 1):
+            weights.append(np.random.rand(layer_sizes[i], layer_sizes[i + 1]))
+            bias.append(np.random.rand(layer_sizes[i + 1]))
 
         return weights, bias
 
