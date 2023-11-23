@@ -21,7 +21,7 @@ class Adaline:
             x_train.insert(0, 'x0', 1)
 
         # adaline algorithm
-        iterations = 1000
+        iterations = 700
         while True:
             for i in range(0, num_samples):
                 # get actual class
@@ -61,53 +61,93 @@ class Adaline:
 
             iterations -= 1
 
+        print("Adaline Training Ends with MSE = ", self.mse)
+        if bias and x_train['x0'].iloc[0] == 1:
+            # print("Bias is 1. Deleting the inserted column.")
+            x_train.drop('x0', axis=1, inplace=True)
+
+    def plot_decision_boundary(self, x_train, y_train, bias):
+        x_train1 = x_train.iloc[:, 0]
+        x_train2 = x_train.iloc[:, 1]
+        y_train_values = y_train.iloc[:, -1].values
+
+        # Create a scatter plot
+        plt.scatter(x_train1[y_train_values == 1], x_train2[y_train_values == 1], label='Class 1', marker='o')
+        plt.scatter(x_train1[y_train_values == -1], x_train2[y_train_values == -1], label='Class -1', marker='x')
+
+        # Set labels and title
+        plt.xlabel('Feature 1')
+        plt.ylabel('Feature 2')
+        plt.title('Adaline Decision Boundary')
+
+        # plot decision boundary
+        x = np.linspace(x_train1.min() - 1, x_train1.max() + 1, 100)
+        if bias:
+            y = -(self.weights[1] * x + self.weights[0]) / self.weights[2]
+        else:
+            y = -(self.weights[0] * x + 0) / self.weights[1]
+
+        plt.plot(x, y, color='yellow')
+        plt.show()
+
     def test(self, x_test, y_test, bias):
-        num_of_samples = x_test.shape[0]
-        y_pred = []
+        num_samples, num_features = x_test.shape
 
         if bias:
             x_test.insert(0,'x0',1)
-
-        for i in range(num_of_samples):
-            values = x_test.iloc[i].values
-            pred = np.dot(self.weights, values)
-            y_pred.append(1 if pred >= 0 else -1)
-
-        y_pred = np.array(y_pred)
-        y_test = y_test.values
 
         true_positive = 0
         false_positive = 0
         true_negative = 0
         false_negative = 0
+        for i in range(num_samples):
+            values = x_test.iloc[i].values
+            prediction = np.dot(self.weights, values)
+            predicted_class = 1 if prediction >= 0 else -1
+            actual_class = y_test.iloc[i].values
 
-        # calculate the confusion matrix
+            if predicted_class == actual_class:
+                if actual_class == 1:
+                    true_positive += 1
+                else:
+                    true_negative += 1
 
-        for i,j in zip(y_test,y_pred):
-            if i == 1 & j == 1:
-                true_positive += 1
-                continue
-            if i == -1 & j == 1:
+            elif actual_class == 1 and predicted_class == -1:
                 false_negative += 1
-                continue
-            if i == -1 & j == -1:
-                true_negative += 1
-                continue
-            if i == 1 & j == -1:
-                false_negative += 1
-                continue
 
-        confusion_matrix = np.array([[true_positive, false_positive], [false_negative, true_negative]])
+            elif actual_class == -1 and predicted_class == 1:
+                false_positive += 1
 
-        # CONSOLE
-        accuracy = (true_positive + true_negative) / num_of_samples
+        # calc accuracy
+        accuracy = (true_positive + true_negative) / num_samples
         print("Adaline Accuracy", accuracy)
 
-        # GUI -> Confusion matrix plotting
-        plt.figure(figsize=(8, 6))
-        sns.heatmap(confusion_matrix, annot=True, fmt='.2f', cmap='Reds',)
-        plt.xlabel('Predicted')
-        plt.ylabel('True')
+        conf_matrix = np.array([[true_negative, false_positive], [false_negative, true_positive]])
+
+        # Plot the confusion matrix
+        sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=['Actual Negative', 'Actual Positive'],
+                    yticklabels=['Predicted Negative', 'Predicted Positive'])
+        plt.xlabel('Actual')
+        plt.ylabel('Predicted')
         plt.title('Adaline Confusion Matrix')
         plt.show()
 
+
+# CONSOLE TEST
+# ft = ["Perimeter", "MajorAxisLength"]
+# cls = ["BOMBAY", "SIRA"]
+# pre = PreProcessing()
+# pre.read_data("Dry_Bean_Dataset.csv", ft, cls)
+#
+# pre.split_data(40)
+# pre.null_handel()
+# pre.normalize_train_data()
+# pre.normalize_test_data()
+#
+# x_train = pre.x_train
+# y_train = pre.y_train
+#
+# ad = Adaline()
+# ad.train(x_train, y_train, 1, 0.01, 0.01)
+# ad.plot_decision_boundary(x_train, y_train, 1)
+# ad.test(pre.x_test, pre.y_test, 1)

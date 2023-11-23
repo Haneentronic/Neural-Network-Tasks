@@ -205,6 +205,7 @@ class task1:
             class_list.append(self.cali_checkbox_value.get())
         if self.sira_checkbox_value.get() != "None":
             class_list.append(self.sira_checkbox_value.get())
+
         preprocessing = PreProcessing()
         preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", features_list, class_list)
         preprocessing.split_data(40)
@@ -227,12 +228,11 @@ class task1:
 
             adaline.train(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get()
                           , float(self.learning_rate_entry.get()), float(self.mse_entry.get()))
-            print("Adaline Training is Complete with mse: ", adaline.mse)
+
+            adaline.plot_decision_boundary(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get())
 
             adaline.test(preprocessing.x_test, preprocessing.y_test, self.bias_checkbox_value.get())
             print("-------------")
-
-
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)
