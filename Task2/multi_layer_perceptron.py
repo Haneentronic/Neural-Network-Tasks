@@ -11,18 +11,19 @@ class NeuralNetwork:
         self.activation = activation
         self.learning_rate = learning_rate
         self.epochs = epochs
-        self.weights = None
-        self.bias = None
-        # self.weights, self.bias = self._initialize_weights_and_bias()
+        self.weights, self.bias = self._initialize_weights_and_bias()
 
     def _initialize_weights_and_bias(self):
         weights = []
         bias = []
+
         layer_sizes = [self.input_size] + self.neurons_hidden
 
-        for i in range(len(layer_sizes) - 1):
+        for i in range(len(layer_sizes) - 2):
             weights.append(np.random.rand(layer_sizes[i], layer_sizes[i + 1]))
             bias.append(np.random.rand(layer_sizes[i + 1]))
+        weights.append(np.random.rand(self.neurons_hidden[self.hidden_layers - 1]))
+        bias.append(np.random.rand(self.neurons_hidden[self.hidden_layers]))
 
         return weights, bias
 
@@ -83,7 +84,5 @@ class NeuralNetwork:
 
 
 # testing forward propagation function on lecture 4 example
-obj = NeuralNetwork(2, 1, 2, "sigmoid", 1, 1)
-obj.weights = np.array([[[0.21, 0.15], [-0.4, 0.1]], [[-0.2, 0.3]]], dtype=object) # sub array per layer containing sub array per neuron
-obj.bias = np.array([[-0.3, 0.25], -0.4], dtype=object)  # subarray per layer
+obj = NeuralNetwork(2, 1, [2, 1], "sigmoid", 1, 1)
 print(obj._forward_propagation([0, 0]))
