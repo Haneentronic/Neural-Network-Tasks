@@ -1,6 +1,6 @@
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
+from Task2.preprocessing import PreProcessing
+from Task2.evaluate import Evaluate
 
 
 class NeuralNetwork:
@@ -44,13 +44,14 @@ class NeuralNetwork:
         output = []
         activated = x
         for layer_number in range(self.hidden_layers + 1):
-            net = np.dot(activated, np.array(self.weights[layer_number]).T) + self.bias[layer_number]
+            net = np.dot(activated, np.array(self.weights[layer_number])) + self.bias[layer_number]
             activated = self._activation_function(net)
             output.extend(activated)
         return output
 
     def _backward_propagation(self, x, y):
         layers = self._forward_propagation(x)
+        print(layers)
         errors = [None] * len(self.hidden_layers)
         deltas = [None] * len(self.hidden_layers)
 
@@ -65,10 +66,10 @@ class NeuralNetwork:
 
         return deltas
 
-    def train(self, X_train, y_train):
+    def train(self, x_train, y_train):
         for epoch in range(self.epochs):
-            for i, x in enumerate(X_train):
-                deltas = self._backward_propagation(x, y_train[i])
+            for i, x in enumerate(x_train):
+                deltas = self._backward_propagation(x_train[i:i+1], y_train[i])
 
                 for j in range(len(self.hidden_layers)):
                     if j == 0:
@@ -79,10 +80,25 @@ class NeuralNetwork:
                     self.weights[j] += self.learning_rate * layer_input.reshape(-1, 1) * deltas[j]
                     self.bias[j] += self.learning_rate * deltas[j]
 
-    def predict(self, X_test):
-        pass
+    def predict(self, x_test):
+        predictions = []
+        for i in range(len(x_test)):
+            output = self._forward_propagation(x_test[i:i+1])
+            labels = output[-1*self.neurons_hidden[-1]:]
+            predictions.append(labels.index(max(labels)))
+        return predictions
 
 
-# testing forward propagation function on lecture 4 example
-obj = NeuralNetwork(2, 1, [2, 1], "sigmoid", 1, 1)
-print(obj._forward_propagation([0, 0]))
+preprocessing = PreProcessing()
+preprocessing.read_data(r"C:\Users\hb\PycharmProjects\Neural-Project\Task2\Dry_Bean_Dataset.csv",
+                        ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
+                        ['CALI', 'BOMBAY', 'SIRA'])
+preprocessing.split_data(40)
+preprocessing.null_handel()
+
+obj = NeuralNetwork(5, 1, [2, 3], "sigmoid", 1, 1)
+# obj.train(preprocessing.x_train, preprocessing.y_train) # Error
+p = obj.predict(preprocessing.x_test)
+ev = Evaluate(p, preprocessing.y_test, obj.neurons_hidden[-1])
+ev.calculate_confusion_matrix()
+ev.calculate_accuracy()

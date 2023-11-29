@@ -21,7 +21,7 @@ class PreProcessing:
         self.y = self.x.iloc[:, -1]
         le = LabelEncoder()
         self.y = le.fit_transform(self.y.values)
-        self.y = pd.DataFrame((self.y * 2) - 1)
+        self.y = pd.DataFrame(self.y)
         self.x = pd.DataFrame(self.x[features])
 
     def split_data(self, split_rate):
