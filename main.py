@@ -1,7 +1,8 @@
 from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
-from Task1.main import task1
+from Task1.main import Task1
+from Task2.main import Task2
 
 def open_task(root, page):
     root.destroy()
@@ -30,14 +31,19 @@ class MainScreen:
 
         task1_button_image = PhotoImage(file="Photos/task1_btn.png")
         task1_button = Button(root, image=task1_button_image, borderwidth=0, cursor="hand2", bd=0,
-                              background=mainColor, activebackground=mainColor, command=lambda: open_task(root, task1))
+                              background=mainColor, activebackground=mainColor, command=lambda: open_task(root, Task1))
+
+        task2_button_image = PhotoImage(file="Photos/task2_btn.png")
+        task2_button = Button(root, image=task2_button_image, borderwidth=0, cursor="hand2", bd=0,
+                              background=mainColor, activebackground=mainColor, command=lambda: open_task(root, Task2))
 
 
         # Placing widgets on the screen
         background_label.place(x=0, y=0)
         main_frame.place(anchor='center', relx=0.5, rely=0.45)
         choose_task_label.place(anchor='center', relx=0.5, y=200)
-        task1_button.place(anchor='center', relx=0.5, y=300)
+        task1_button.place(anchor='center', relx=0.4, y=300)
+        task2_button.place(anchor='center', relx=0.6, y=300)
         image_label.pack()
 
         root.mainloop()
