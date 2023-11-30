@@ -125,9 +125,13 @@ class Task2:
                                     background=self.mainColor, foreground=self.foregroundColor)
 # ---------------------------------------------------------------------------------------------------------
 
-        self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/run_btn.png")
+        self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task2/classifyBtn.png")
         self.run_button = Button(self.root, image=self.run_button_image, borderwidth=0, cursor="hand2", bd=0,
                                  background=self.mainColor, activebackground=self.mainColor, command=lambda: self.run())
+
+        self.train_button_image = PhotoImage(file="../Neural-Project/Photos/Task2/trainBtn.png")
+        self.train_button = Button(self.root, image=self.train_button_image, borderwidth=0, cursor="hand2", bd=0,
+                                 background=self.mainColor, activebackground=self.mainColor)
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)
@@ -159,7 +163,8 @@ class Task2:
 
         self.bias_checkbox.place(anchor='center', relx=0.23, y=470)
 
-        self.run_button.place(anchor='center', relx=0.67, y=458)
+        self.train_button.place(anchor='center', relx=0.55, y=458)
+        self.run_button.place(anchor='center', relx=0.68, y=458)
         self.image_label.pack()
 
     def run(self):
