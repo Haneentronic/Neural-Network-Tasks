@@ -6,6 +6,7 @@ import numpy as np
 
 class PreProcessing:
     def __init__(self):
+        self.df = None
         self.x = None
         self.y = None
         self.x_train = None
@@ -15,9 +16,10 @@ class PreProcessing:
         self.scaler = None
 
     def read_data(self, filename, features, classes):
-        self.x = pd.read_csv(filename)
-        self.x = self.x.loc[self.x[self.x.columns[-1]].isin(classes)]
-        self.y = self.x.iloc[:, -1]
+        self.df = pd.read_csv(filename)
+        # self.x = pd.read_csv(filename)
+        self.x = self.df.loc[self.df[self.df.columns[-1]].isin(classes)]
+        self.y = self.df.iloc[:, -1]
         self.y = pd.get_dummies(self.y, columns=['Class'], dtype=int)
         self.x = pd.DataFrame(self.x[features])
 
@@ -48,10 +50,10 @@ class PreProcessing:
 
 
     def handel_outlier_with_column(self, column):
-        col = self.x[column]
+        col = self.df[column]
         upper_limit = col.mean() + 3 * col.std()
         lowe_limit = col.mean() - 3 * col.std()
-        self.x = self.x.loc[(col < upper_limit) & (col > lowe_limit)]
+        self.df = self.df.loc[(col < upper_limit) & (col > lowe_limit)]
 
     def handel_all_outliers(self):
         # handel outlier in roundnes column
@@ -60,4 +62,5 @@ class PreProcessing:
         # handel outlier in MinorAxisLength column
         self.handel_outlier_with_column('MinorAxisLength')
 
-        print("data:", len(self.x))
+        print("data:", len(self.df))
+        print("********************************************************")

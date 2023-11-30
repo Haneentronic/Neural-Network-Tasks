@@ -174,7 +174,6 @@ class Task2:
         preprocessing.null_handel()
         preprocessing.normalize_train_data()
         preprocessing.normalize_test_data()
-
         hidden_neurons_list = list(self.num_neurons_value.get().split(","))
         hidden_neurons_list = list(map(int, hidden_neurons_list))
 
