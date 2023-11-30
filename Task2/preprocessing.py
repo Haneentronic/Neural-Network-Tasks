@@ -45,3 +45,19 @@ class PreProcessing:
     def normalize_test_data(self):
         self.x_test = self.scaler.transform(self.x_test.iloc[:, 0:5])
         self.x_test = pd.DataFrame(self.x_test)
+
+
+    def handel_outlier_with_column(self, column):
+        col = self.x[column]
+        upper_limit = col.mean() + 3 * col.std()
+        lowe_limit = col.mean() - 3 * col.std()
+        self.x = self.x.loc[(col < upper_limit) & (col > lowe_limit)]
+
+    def handel_all_outliers(self):
+        # handel outlier in roundnes column
+        self.handel_outlier_with_column('roundnes')
+
+        # handel outlier in MinorAxisLength column
+        self.handel_outlier_with_column('MinorAxisLength')
+
+        print("data:", len(self.x))

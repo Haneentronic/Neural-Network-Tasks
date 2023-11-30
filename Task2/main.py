@@ -167,6 +167,9 @@ class Task2:
         preprocessing.read_data("Task2/Dry_Bean_Dataset.csv",
                                 ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
                                 ['CALI', 'BOMBAY', 'SIRA'])
+
+        preprocessing.handel_all_outliers()
+
         preprocessing.split_data(40)
         preprocessing.null_handel()
         preprocessing.normalize_train_data()
