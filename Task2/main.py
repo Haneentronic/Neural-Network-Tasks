@@ -95,6 +95,36 @@ class Task2:
                                                      selectimage=self.hyperbolic_tangent_image_on, activebackground=self.mainColor,
                                                      indicatoron=False, bd=0, cursor="hand2")
 
+# --------------------------------------------------------------------------------------------------------
+        self.user_inputs_path = PhotoImage(file="../Neural-Project/Photos/Task2/user_input.png")
+        self.user_inputs_image_entry = Label(self.root, image=self.user_inputs_path, bg=self.mainColor)
+
+        self.area_value = StringVar(value="")
+        self.area_entry = Entry(self.root, width=7, font=("arial", 10), bd=0,
+                                textvariable=self.area_value,
+                                background=self.mainColor, foreground=self.foregroundColor)
+
+        self.perimeter_value = StringVar(value="")
+        self.perimeter_entry = Entry(self.root, width=7, font=("arial", 10), bd=0,
+                                     textvariable=self.perimeter_value,
+                                     background=self.mainColor, foreground=self.foregroundColor)
+
+        self.major_axis_length_value = StringVar(value="")
+        self.major_axis_length_entry = Entry(self.root, width=7, font=("arial", 10), bd=0,
+                                             textvariable=self.major_axis_length_value,
+                                             background=self.mainColor, foreground=self.foregroundColor)
+
+        self.minor_axis_length_value = StringVar(value="")
+        self.minor_axis_length_entry = Entry(self.root, width=7, font=("arial", 10), bd=0,
+                                             textvariable=self.minor_axis_length_value,
+                                             background=self.mainColor, foreground=self.foregroundColor)
+
+        self.roundnes_value = StringVar(value="")
+        self.roundnes_entry = Entry(self.root, width=7, font=("arial", 10), bd=0,
+                                    textvariable=self.roundnes_value,
+                                    background=self.mainColor, foreground=self.foregroundColor)
+# ---------------------------------------------------------------------------------------------------------
+
         self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/run_btn.png")
         self.run_button = Button(self.root, image=self.run_button_image, borderwidth=0, cursor="hand2", bd=0,
                                  background=self.mainColor, activebackground=self.mainColor, command=lambda: self.run())
@@ -103,24 +133,31 @@ class Task2:
         self.background2_label.place(x=0, y=0)
         self.main_frame2.place(anchor='center', relx=0.5, rely=0.45)
 
-        self.num_hidden_layers_image_entry.place(anchor='center', relx=0.355, y=120)
-        self.num_hidden_layers_entry.place(anchor='center', relx=0.532, y=120)
+        self.num_hidden_layers_image_entry.place(anchor='center', relx=0.355, y=100)
+        self.num_hidden_layers_entry.place(anchor='center', relx=0.532, y=100)
 
-        self.num_neurons_image_entry.place(anchor='center', relx=0.355, y=170)
-        self.num_neurons_entry.place(anchor='center', relx=0.532, y=170)
+        self.num_neurons_image_entry.place(anchor='center', relx=0.355, y=150)
+        self.num_neurons_entry.place(anchor='center', relx=0.532, y=150)
 
-        self.learning_rate_image_entry.place(anchor='center', relx=0.355, y=220)
-        self.learning_rate_entry.place(anchor='center', relx=0.532, y=220)
+        self.learning_rate_image_entry.place(anchor='center', relx=0.355, y=200)
+        self.learning_rate_entry.place(anchor='center', relx=0.532, y=200)
 
-        self.epochs_image_entry.place(anchor='center', relx=0.355, y=270)
-        self.epochs_entry.place(anchor='center', relx=0.532, y=270)
+        self.epochs_image_entry.place(anchor='center', relx=0.355, y=250)
+        self.epochs_entry.place(anchor='center', relx=0.532, y=250)
 
-        self.activation_function_label.place(anchor='center', relx=0.265, y=340)
+        self.activation_function_label.place(anchor='center', relx=0.265, y=300)
 
-        self.sigmoid_button.place(anchor='center', relx=0.17, y=380)
-        self.hyperbolic_tangent_button.place(anchor='center', relx=0.43, y=380)
+        self.sigmoid_button.place(anchor='center', relx=0.17, y=340)
+        self.hyperbolic_tangent_button.place(anchor='center', relx=0.43, y=340)
 
-        self.bias_checkbox.place(anchor='center', relx=0.23, y=450)
+        self.user_inputs_image_entry.place(anchor='center', relx=0.433, y=390)
+        self.area_entry.place(anchor='center', relx=0.14, y=402)
+        self.perimeter_entry.place(anchor='center', relx=0.2579, y=402)
+        self.major_axis_length_entry.place(anchor='center', relx=0.4079, y=402)
+        self.minor_axis_length_entry.place(anchor='center', relx=0.572, y=402)
+        self.roundnes_entry.place(anchor='center', relx=0.7159, y=402)
+
+        self.bias_checkbox.place(anchor='center', relx=0.23, y=470)
 
         self.run_button.place(anchor='center', relx=0.67, y=458)
         self.image_label.pack()
@@ -138,7 +175,7 @@ class Task2:
         hidden_neurons_list = list(self.num_neurons_value.get().split(","))
         hidden_neurons_list = list(map(int, hidden_neurons_list))
 
-        NN = NeuralNetwork(5, int(self.num_hidden_layers_value.get()), hidden_neurons_list, 3, int(self.learning_rate_value.get()),  int(self.epochs_value.get()), self.activation_function_value.get(), int(self.bias_checkbox_value.get()))
+        NN = NeuralNetwork(5, int(self.num_hidden_layers_value.get()), hidden_neurons_list, 3, float(self.learning_rate_value.get()),  int(self.epochs_value.get()), self.activation_function_value.get(), int(self.bias_checkbox_value.get()))
         NN.train(preprocessing.x_train, preprocessing.y_train)
         train_prediction = NN.predict(preprocessing.x_train)
         train_evaluator = Evaluate(train_prediction, preprocessing.y_train, 3)
