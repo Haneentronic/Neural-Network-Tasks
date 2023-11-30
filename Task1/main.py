@@ -5,7 +5,8 @@ from Task1.preprocessing import PreProcessing
 from Task1.perceptron import Perceptron
 from Task1.adaline import Adaline
 
-class task1:
+
+class Task1:
     def __init__(self):
         self.mainColor = 'white'
         self.foregroundColor = '#FF8888'
@@ -55,7 +56,8 @@ class task1:
                                               image=self.perimeter_image_off, selectimage=self.perimeter_image_on,
                                               activebackground=self.mainColor,
                                               foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                              onvalue="Perimeter", offvalue="None", command=self.update_features_checkbox)
+                                              onvalue="Perimeter", offvalue="None",
+                                              command=self.update_features_checkbox)
 
         self.roundnes_checkbox_value = StringVar(value="None")
         self.roundnes_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/roundnes_on.png")
@@ -75,7 +77,8 @@ class task1:
                                           image=self.major_image_off, selectimage=self.major_image_on,
                                           activebackground=self.mainColor,
                                           foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                          onvalue="MajorAxisLength", offvalue="None", command=self.update_features_checkbox)
+                                          onvalue="MajorAxisLength", offvalue="None",
+                                          command=self.update_features_checkbox)
 
         self.minor_checkbox_value = StringVar(value="None")
         self.minor_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/minor_on.png")
@@ -85,7 +88,8 @@ class task1:
                                           image=self.minor_image_off, selectimage=self.minor_image_on,
                                           activebackground=self.mainColor,
                                           foreground=self.secondColor, bd=0, indicatoron=False, cursor="hand2",
-                                          onvalue="MinorAxisLength", offvalue="None", command=self.update_features_checkbox)
+                                          onvalue="MinorAxisLength", offvalue="None",
+                                          command=self.update_features_checkbox)
 
         self.select_class = Image.open("../Neural-Project/Photos/Task1/select_classes.png")
         self.select_class_image = ImageTk.PhotoImage(self.select_class)
@@ -218,7 +222,7 @@ class task1:
             o.perceptron_test()
             print("Perceptron Accuracy: ", o.accuracy_score())
             print("-------------")
-            o.plot_confusion_matrix(o.confusion_matrix(),class_list)
+            o.plot_confusion_matrix(o.confusion_matrix(), class_list)
             o.ploting()
 
         elif self.algorithm_value.get() == "adaline":
