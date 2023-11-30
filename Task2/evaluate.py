@@ -8,12 +8,13 @@ class Evaluate:
         self.num_classes = num_classes
         self.confusion_matrix = None
 
-    def calculate_confusion_matrix(self):
+    def calculate_confusion_matrix(self, predicted):
         self.confusion_matrix = np.zeros((self.num_classes, self.num_classes))
-        for i in range(len(self.prediction)):
-            ind1 = self.prediction[i]
-            ind2 = self.actual.iloc[i, -1]
-            self.confusion_matrix[ind2][ind1] += 1
+        #print(self.actual[0].tolist())
+        for a, p in zip(self.actual[0].tolist(), predicted):
+            self.confusion_matrix[a][np.argmax(p)] += 1
+
+        return self.confusion_matrix
 
     def calculate_accuracy(self):
         sum = 0

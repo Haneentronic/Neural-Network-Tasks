@@ -1,33 +1,30 @@
 import numpy as np
-from Task2.preprocessing import PreProcessing
-from Task2.evaluate import Evaluate
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+# PreProcessing class definition (use your provided code)
+from preprocessing import PreProcessing
+from evaluate import Evaluate
+# Evaluate class definition (use your provided code)
 
 
 class NeuralNetwork:
-    def __init__(self, input_size, hidden_layers, neurons_hidden, activation, learning_rate, epochs):
+    def __init__(self, input_size, hidden_size, output_size, learning_rate, epochs , activation):
         self.input_size = input_size
-        self.hidden_layers = hidden_layers
-        self.neurons_hidden = neurons_hidden
-        self.activation = activation
+        self.hidden_size = hidden_size
+        self.output_size = output_size
         self.learning_rate = learning_rate
         self.epochs = epochs
-        self.weights, self.bias = self._initialize_weights_and_bias()
+        self.activation=activation
 
-    def _initialize_weights_and_bias(self):
-        weights = []
-        bias = []
+        # Initialize weights and biases
+        self.weights_input_hidden = np.random.rand(self.input_size, self.hidden_size)
+        self.bias_input_hidden = np.zeros((1, self.hidden_size))
+        self.weights_hidden_output = np.random.rand(self.hidden_size, self.output_size)
+        self.bias_hidden_output = np.zeros((1, self.output_size))
 
-        layer_sizes = [self.input_size] + self.neurons_hidden
-
-        for i in range(len(layer_sizes) - 2):
-            weights.append(np.random.rand(layer_sizes[i], layer_sizes[i + 1]))
-            bias.append(np.random.rand(layer_sizes[i + 1]))
-        weights.append(np.random.rand(self.neurons_hidden[self.hidden_layers - 1]))
-        bias.append(np.random.rand(self.neurons_hidden[self.hidden_layers]))
-
-        return weights, bias
-
-    # Activation functions and their derivatives
+        # Activation functions and their derivatives
     def _activation_function(self, x):
         if self.activation == 'sigmoid':
             return 1 / (1 + np.exp(-x))
@@ -40,65 +37,79 @@ class NeuralNetwork:
         elif self.activation == 'tanh':
             return 1 - np.tanh(x) ** 2
 
-    def _forward_propagation(self, x):
-        output = []
-        activated = x
-        for layer_number in range(self.hidden_layers + 1):
-            net = np.dot(activated, np.array(self.weights[layer_number])) + self.bias[layer_number]
-            activated = self._activation_function(net)
-            output.extend(activated)
-        return output
+    def forward_propagation(self, x):
+        # Input to hidden layer
+        self.hidden_output = self._activation_function(np.dot(x, self.weights_input_hidden) + self.bias_input_hidden)
+        # Hidden to output layer
+        self.predicted_output = self._activation_function(
+            np.dot(self.hidden_output, self.weights_hidden_output) + self.bias_hidden_output)
 
-    def _backward_propagation(self, x, y):
-        layers = self._forward_propagation(x)
-        print(layers)
-        errors = [None] * len(self.hidden_layers)
-        deltas = [None] * len(self.hidden_layers)
+    def backward_propagation(self, x, y):
+        # Output to hidden layer
+        output_error = y - self.predicted_output
+        d_output = output_error * self._activation_derivative(self.predicted_output)
 
-        output_error = layers[-1] - y
-        output_delta = output_error * self._activation_derivative(layers[-1])
-        errors[-1] = output_error
-        deltas[-1] = output_delta
+        # Hidden to input layer
+        hidden_error = d_output.dot(self.weights_hidden_output.T)
+        d_hidden = hidden_error * self._activation_derivative(self.hidden_output)
 
-        for i in range(len(self.hidden_layers) - 1, 0, -1):
-            errors[i - 1] = deltas[i].dot(self.weights[i].T)
-            deltas[i - 1] = errors[i - 1] * self._activation_derivative(layers[i])
+        # Update weights and biases
+        self.weights_hidden_output += self.hidden_output.T.dot(d_output) * self.learning_rate
+        self.bias_hidden_output += np.sum(d_output, axis=0, keepdims=True) * self.learning_rate
+        self.weights_input_hidden += x.T.dot(d_hidden) * self.learning_rate
+        self.bias_input_hidden += np.sum(d_hidden, axis=0, keepdims=True) * self.learning_rate
 
-        return deltas
-
-    def train(self, x_train, y_train):
+    def train(self, x, y):
         for epoch in range(self.epochs):
-            for i, x in enumerate(x_train):
-                deltas = self._backward_propagation(x_train[i:i+1], y_train[i])
+            # Forward propagation
+            self.forward_propagation(x)
 
-                for j in range(len(self.hidden_layers)):
-                    if j == 0:
-                        layer_input = x
-                    else:
-                        layer_input = layers[j - 1]
+            # Backward propagation
+            self.backward_propagation(x, y)
 
-                    self.weights[j] += self.learning_rate * layer_input.reshape(-1, 1) * deltas[j]
-                    self.bias[j] += self.learning_rate * deltas[j]
+    def predict(self, x):
+        self.forward_propagation(x)
+        return self.predicted_output
 
-    def predict(self, x_test):
-        predictions = []
-        for i in range(len(x_test)):
-            output = self._forward_propagation(x_test[i:i+1])
-            labels = output[-1*self.neurons_hidden[-1]:]
-            predictions.append(labels.index(max(labels)))
-        return predictions
+# Using PreProcessing and NeuralNetwork classes to load data, train the model, and print confusion matrix and accuracy
+data_processor = PreProcessing()
 
-
-preprocessing = PreProcessing()
-preprocessing.read_data(r"C:\Users\hb\PycharmProjects\Neural-Project\Task2\Dry_Bean_Dataset.csv",
+# Read data and specify features and classes
+data_processor.read_data(r"Dry_Bean_Dataset.csv",
                         ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
                         ['CALI', 'BOMBAY', 'SIRA'])
-preprocessing.split_data(40)
-preprocessing.null_handel()
+# Split the data into training and testing sets
+data_processor.split_data(40)  # Adjust split rate as needed
 
-obj = NeuralNetwork(5, 1, [2, 3], "sigmoid", 1, 1)
-# obj.train(preprocessing.x_train, preprocessing.y_train) # Error
-p = obj.predict(preprocessing.x_test)
-ev = Evaluate(p, preprocessing.y_test, obj.neurons_hidden[-1])
-ev.calculate_confusion_matrix()
-ev.calculate_accuracy()
+# Handle missing values in the training set
+data_processor.null_handel()
+# Normalize the training and testing data
+data_processor.normalize_train_data()
+data_processor.normalize_test_data()
+
+# Instantiate the neural network
+# input_size = len(data_processor.x_train.columns)
+# ... (same as previous code)
+
+# Instantiate the neural network
+hidden_size = 128  # Adjusted hidden layer size
+neural_net = NeuralNetwork(5, hidden_size, 3, 0.1, 500, 'tanh')  # Adjusted learning rate and epochs
+
+# Train the neural network
+neural_net.train(data_processor.x_train.values, data_processor.y_train.values)
+
+# Make predictions on the test set
+predictions = neural_net.predict(data_processor.x_test.values)
+
+# Instantiate Evaluate class
+evaluator = Evaluate(predictions.flatten(), data_processor.y_test, 3)
+
+# Calculate confusion matrix
+confusion_matrix = evaluator.calculate_confusion_matrix(predictions)
+print("Confusion Matrix:")
+print(confusion_matrix)
+
+# Calculate accuracy
+accuracy = evaluator.calculate_accuracy()
+print(f"Accuracy: {accuracy * 100:.2f}%")
+
