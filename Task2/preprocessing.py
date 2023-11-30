@@ -2,7 +2,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 
 
 class PreProcessing:
@@ -19,14 +18,12 @@ class PreProcessing:
         self.x = pd.read_csv(filename)
         self.x = self.x.loc[self.x[self.x.columns[-1]].isin(classes)]
         self.y = self.x.iloc[:, -1]
-        le = LabelEncoder()
-        self.y = le.fit_transform(self.y.values)
-        self.y = pd.DataFrame(self.y)
+        self.y = pd.get_dummies(self.y, columns=['Class'], dtype=int)
         self.x = pd.DataFrame(self.x[features])
 
     def split_data(self, split_rate):
         self.x_train, self.x_test, self.y_train, self.y_test = \
-            train_test_split(self.x, self.y, test_size=split_rate / 100, stratify=self.y ,random_state=42 )
+            train_test_split(self.x, self.y, test_size=split_rate / 100, stratify=self.y, random_state=42)
 
         # Convert the arrays back to DataFrames
         self.x_train = pd.DataFrame(self.x_train)
@@ -42,9 +39,9 @@ class PreProcessing:
 
     def normalize_train_data(self):
         self.scaler = MinMaxScaler()
-        self.x_train = self.scaler.fit_transform(self.x_train)
+        self.x_train = self.scaler.fit_transform(self.x_train.iloc[:, 0:5])
         self.x_train = pd.DataFrame(self.x_train)
 
     def normalize_test_data(self):
-        self.x_test = self.scaler.transform(self.x_test)
+        self.x_test = self.scaler.transform(self.x_test.iloc[:, 0:5])
         self.x_test = pd.DataFrame(self.x_test)
