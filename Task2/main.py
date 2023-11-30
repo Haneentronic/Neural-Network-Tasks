@@ -2,7 +2,8 @@ from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
 from Task2.preprocessing import PreProcessing
-
+from Task2.evaluate_old import Evaluate
+from Task2.multi_layer_perceptron_vectroized import NeuralNetwork
 
 class Task2:
     def __init__(self):
@@ -82,21 +83,21 @@ class Task2:
         self.sigmoid_image_on = PhotoImage(file="../Neural-Project/Photos/Task2/on/sigmoid.png")
         self.sigmoid_image_off = PhotoImage(file="../Neural-Project/Photos/Task2/off/sigmoid.png")
         self.sigmoid_button = Radiobutton(self.root, variable=self.activation_function_value,
-                                          value="adaline", background=self.mainColor, image=self.sigmoid_image_off,
+                                          value="sigmoid", background=self.mainColor, image=self.sigmoid_image_off,
                                           selectimage=self.sigmoid_image_on, activebackground=self.mainColor,
                                           indicatoron=False, bd=0, cursor="hand2")
 
         self.hyperbolic_tangent_image_on = PhotoImage(file="../Neural-Project/Photos/Task2/on/hyperbolic_tangent.png")
         self.hyperbolic_tangent_image_off = PhotoImage(file="../Neural-Project/Photos/Task2/off/hyperbolic_tangent.png")
         self.hyperbolic_tangent_button = Radiobutton(self.root, variable=self.activation_function_value,
-                                                     value="perceptron", background=self.mainColor,
+                                                     value="tanh", background=self.mainColor,
                                                      image=self.hyperbolic_tangent_image_off,
                                                      selectimage=self.hyperbolic_tangent_image_on, activebackground=self.mainColor,
                                                      indicatoron=False, bd=0, cursor="hand2")
 
         self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/run_btn.png")
         self.run_button = Button(self.root, image=self.run_button_image, borderwidth=0, cursor="hand2", bd=0,
-                                 background=self.mainColor, activebackground=self.mainColor)
+                                 background=self.mainColor, activebackground=self.mainColor, command=lambda: self.run())
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)
@@ -124,3 +125,26 @@ class Task2:
         self.run_button.place(anchor='center', relx=0.67, y=458)
         self.image_label.pack()
 
+    def run(self):
+        preprocessing = PreProcessing()
+        preprocessing.read_data("Task2/Dry_Bean_Dataset.csv",
+                                ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
+                                ['CALI', 'BOMBAY', 'SIRA'])
+        preprocessing.split_data(40)
+        preprocessing.null_handel()
+        hidden_neurons_list = list(self.num_neurons_value.get().split(","))
+        hidden_neurons_list = list(map(int, hidden_neurons_list))
+        hidden_neurons_list.append(3)
+        NN = NeuralNetwork(5, int(self.num_hidden_layers_value.get()), hidden_neurons_list, self.activation_function_value.get(), int(self.learning_rate_value.get()),  int(self.epochs_value.get()), int(self.bias_checkbox_value.get()))
+        NN.train(preprocessing.x_train, preprocessing.y_train)
+        train_prediction = NN.predict(preprocessing.x_train)
+        train_evaluator = Evaluate(train_prediction, preprocessing.y_train, NN.neurons_hidden[-1])
+        train_evaluator.calculate_confusion_matrix()
+        print("Train confusion_matrix ", train_evaluator.confusion_matrix)
+        print("Train accuracy: ", train_evaluator.calculate_accuracy())
+
+        test_prediction = NN.predict(preprocessing.x_test)
+        test_evaluator = Evaluate(test_prediction, preprocessing.y_test, NN.neurons_hidden[-1])
+        test_evaluator.calculate_confusion_matrix()
+        print("Test confusion_matrix ", test_evaluator.confusion_matrix)
+        print("Test accuracy: ", test_evaluator.calculate_accuracy())
