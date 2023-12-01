@@ -9,6 +9,7 @@ class MultiLayerPerceptron:
         self.hidden_layers = hidden_layers
         self.num_outputs = num_outputs
         self.activation = activation
+        self.bias_enable = bias_enable
 
         # layers
         self.layers = [self.num_inputs] + self.hidden_layers + [self.num_outputs]
@@ -139,11 +140,12 @@ class MultiLayerPerceptron:
             # print("updated w\n", self.weights[i])
 
             # update bias
-            bias = self.biases[i]
-            # print("old bias", bias)
-            self.biases[i] += errors * eta
-            # print("new bias", bias)
-            # print("---------")
+            if self.bias_enable:
+                bias = self.biases[i]
+                # print("old bias", bias)
+                self.biases[i] += errors * eta
+                # print("new bias", bias)
+                # print("---------")
 
     def train(self, inputs, targets, epochs, eta, bias_enable):
         for epoch in range(epochs):
@@ -188,19 +190,19 @@ def extract_input_and_output(x, y):
     return INPUTS, OUTPUTS
 
 # TO RUN USING CONSOLE UNCOMMMENT STARTING FROM HERE
-# activation1 = "sigmoid"
-# activation2 = "tanh"
-# mlp = MultiLayerPerceptron(5, [3, 5], 3, activation2, 0)
-#
-# preprocessing = PreProcessing()
-# preprocessing.read_data("Dry_Bean_Dataset.csv",
-#                         ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
-#                         ['CALI', 'BOMBAY', 'SIRA'])
-# preprocessing.handel_all_outliers()
-# preprocessing.split_data(40)
-# preprocessing.null_handel()
-# preprocessing.normalize_train_data()
-# preprocessing.normalize_test_data()
+activation1 = "sigmoid"
+activation2 = "tanh"
+mlp = MultiLayerPerceptron(5, [3, 5], 3, activation1, 0)
+
+preprocessing = PreProcessing()
+preprocessing.read_data("Dry_Bean_Dataset.csv",
+                        ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
+                        ['CALI', 'BOMBAY', 'SIRA'])
+preprocessing.handel_all_outliers()
+preprocessing.split_data(40)
+preprocessing.null_handel()
+preprocessing.normalize_train_data()
+preprocessing.normalize_test_data()
 # STOP HERE, GO TO 220
 
 # num_samples, num_features = preprocessing.x_train.shape
@@ -218,36 +220,44 @@ def extract_input_and_output(x, y):
 # OUTPUTS = np.array(OUTPUTS)
 
 # START HERE
-# train_input, train_expected_output = extract_input_and_output(preprocessing.x_train, preprocessing.y_train)
-# mlp.train(train_input, train_expected_output, 30, 0.5, 1)
-# train_prediction = mlp.predict(preprocessing.x_train)
-# train_evaluator = Evaluate(train_prediction, train_expected_output, mlp.num_outputs)
-# train_evaluator.calculate_confusion_matrix()
-# print("Train Confusion Matrix: ")
-# print(train_evaluator.confusion_matrix)
-# print("Train Accuracy: ", train_evaluator.calculate_accuracy())
-#
-# test_input, test_expected_output = extract_input_and_output(preprocessing.x_test, preprocessing.y_test)
-# test_prediction = mlp.predict(preprocessing.x_test)
-# test_evaluator = Evaluate(test_prediction, test_expected_output, mlp.num_outputs)
-# test_evaluator.calculate_confusion_matrix()
-# print("Test Confusion Matrix: ")
-# print(test_evaluator.confusion_matrix)
-# print("Test Accuracy: ", test_evaluator.calculate_accuracy())
+train_input, train_expected_output = extract_input_and_output(preprocessing.x_train, preprocessing.y_train)
+mlp.train(train_input, train_expected_output, 20, 0.5, 1)
+train_prediction = mlp.predict(preprocessing.x_train)
+train_evaluator = Evaluate(train_prediction, train_expected_output, mlp.num_outputs)
+train_evaluator.calculate_confusion_matrix()
+print("Train Confusion Matrix: ")
+print(train_evaluator.confusion_matrix)
+print("Train Accuracy: ", train_evaluator.calculate_accuracy())
+
+test_input, test_expected_output = extract_input_and_output(preprocessing.x_test, preprocessing.y_test)
+test_prediction = mlp.predict(preprocessing.x_test)
+test_evaluator = Evaluate(test_prediction, test_expected_output, mlp.num_outputs)
+test_evaluator.calculate_confusion_matrix()
+print("Test Confusion Matrix: ")
+print(test_evaluator.confusion_matrix)
+print("Test Accuracy: ", test_evaluator.calculate_accuracy())
 # STOP HERE
 
 # UNCOMMENT TO CLASSIFY SINGLE SAMPLE USING CONSOLE
-# import pandas as pd
-# data = {'Area': [114004],
-#         'Perimeter': [1279.356],
-#         'MajorAxisLength': [451.3612558],
-#         'MinorAxisLength': [323.7479961],
-#         'roundnes': [0.875280258]}
-# sample = pd.DataFrame(data)
-# sample = preprocessing.normalize_sample(sample)
-# sample_prediction = mlp.predict(sample)
-# print("Sample Prediction: ", sample_prediction)
-# STOP HERE
+import pandas as pd
+data = {'Area': [114004],
+        'Perimeter': [1279.356],
+        'MajorAxisLength': [451.3612558],
+        'MinorAxisLength': [323.7479961],
+        'roundnes': [0.875280258]}
+sample = pd.DataFrame(data)
+sample = preprocessing.normalize_sample(sample)
+sample_prediction = mlp.predict(sample)
+
+print("Sample Prediction: ", sample_prediction)
+predicted_class = []
+if sample_prediction[0][0] == 1:
+    predicted_class = "BOMBAY"
+elif sample_prediction[0][1] == 1:
+    predicted_class = "CALI"
+elif sample_prediction[0][2] == 1:
+    predicted_class = "SIRA"
+print("predicted class for ur inputs: ", predicted_class)
 
 # convert weights on the last layer to 1 (mx), 0(others)
 # def converter(x):
