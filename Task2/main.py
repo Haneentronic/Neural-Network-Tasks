@@ -1,10 +1,11 @@
 from tkinter import *
 import tkinter as tk
+import pandas as pd
 from PIL import Image, ImageTk
 from Task2.preprocessing import PreProcessing
 from Task2.evaluate_old import Evaluate
-from Task2.multi_layer_perceptron_nonVectorized import NeuralNetwork
-# from Task2.multi_layer_perceptron import NeuralNetwork
+from Task2.Abdelrhman_multi_layer_perceptron import MultiLayerPerceptron, extract_input_and_output
+
 
 class Task2:
     def __init__(self):
@@ -69,7 +70,7 @@ class Task2:
 
 
 
-        self.bias_checkbox_value = IntVar(value=-1)
+        self.bias_checkbox_value = IntVar(value=0)
         self.bias_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/bias.png")
         self.bias_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/not_bias.png")
         self.bias_checkbox = Checkbutton(self.root, variable=self.bias_checkbox_value,
@@ -128,11 +129,12 @@ class Task2:
 
         self.run_button_image = PhotoImage(file="../Neural-Project/Photos/Task2/classifyBtn.png")
         self.run_button = Button(self.root, image=self.run_button_image, borderwidth=0, cursor="hand2", bd=0,
-                                 background=self.mainColor, activebackground=self.mainColor, command=lambda: self.run())
+                                 background=self.mainColor, activebackground=self.mainColor,
+                                 command=lambda: self.classify_sample())
 
         self.train_button_image = PhotoImage(file="../Neural-Project/Photos/Task2/trainBtn.png")
         self.train_button = Button(self.root, image=self.train_button_image, borderwidth=0, cursor="hand2", bd=0,
-                                 background=self.mainColor, activebackground=self.mainColor)
+                                 background=self.mainColor, activebackground=self.mainColor, command=lambda: self.run())
 
     def placing_widgets(self):
         self.background2_label.place(x=0, y=0)
@@ -169,37 +171,46 @@ class Task2:
         self.image_label.pack()
 
     def run(self):
-        preprocessing = PreProcessing()
-        preprocessing.read_data("Task2/Dry_Bean_Dataset.csv",
+        self.preprocessing = PreProcessing()
+        self.preprocessing.read_data("Task2/Dry_Bean_Dataset.csv",
                                 ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
                                 ['CALI', 'BOMBAY', 'SIRA'])
+        self.preprocessing.handel_all_outliers()
+        self.preprocessing.split_data(40)
+        self.preprocessing.null_handel()
+        self.preprocessing.normalize_train_data()
+        self.preprocessing.normalize_test_data()
 
-        preprocessing.handel_all_outliers()
-
-        preprocessing.split_data(40)
-        preprocessing.null_handel()
-        preprocessing.normalize_train_data()
-        preprocessing.normalize_test_data()
         hidden_neurons_list = list(self.num_neurons_value.get().split(","))
         hidden_neurons_list = list(map(int, hidden_neurons_list))
 
-        NN = NeuralNetwork(5, int(self.num_hidden_layers_value.get()), hidden_neurons_list, 3,
-                           float(self.learning_rate_value.get()),  int(self.epochs_value.get()),
-                           self.activation_function_value.get(), int(self.bias_checkbox_value.get()))
-        NN.train(preprocessing.x_train, preprocessing.y_train)
-        train_prediction = NN.predict(preprocessing.x_train)
-        train_evaluator = Evaluate(train_prediction, preprocessing.y_train, 3)
+        self.mlp = MultiLayerPerceptron(5, hidden_neurons_list, 3, self.activation_function_value.get(), int(self.bias_checkbox_value.get()))
+        train_input, train_expected_output = extract_input_and_output(self.preprocessing.x_train, self.preprocessing.y_train)
+        self.mlp.train(train_input, train_expected_output,
+                  int(self.epochs_value.get()), float(self.learning_rate_value.get()), int(self.bias_checkbox_value.get()))
+        train_prediction = self.mlp.predict(self.preprocessing.x_train)
+        train_evaluator = Evaluate(train_prediction, train_expected_output, self.mlp.num_outputs)
         train_evaluator.calculate_confusion_matrix()
-        print("Train confusion_matrix ", train_evaluator.confusion_matrix)
-        print("Train accuracy: ", train_evaluator.calculate_accuracy())
-        # from sklearn.metrics import accuracy_score
-        # accuracy = accuracy_score(preprocessing.y_train, train_prediction)
-        # print("train bulit in", accuracy)
-        test_prediction = NN.predict(preprocessing.x_test)
-        test_evaluator = Evaluate(test_prediction, preprocessing.y_test,3)
-        test_evaluator.calculate_confusion_matrix()
-        print("Test confusion_matrix ", test_evaluator.confusion_matrix)
-        print("Test accuracy: ", test_evaluator.calculate_accuracy())
+        print("Train Confusion Matrix: ")
+        print(train_evaluator.confusion_matrix)
+        print("Train Accuracy: ", train_evaluator.calculate_accuracy())
 
-        # accuracy = accuracy_score(preprocessing.y_test, test_prediction)
-        # print("test bulit in", accuracy)
+        test_input, test_expected_output = extract_input_and_output(self.preprocessing.x_test, self.preprocessing.y_test)
+        test_prediction = self.mlp.predict(self.preprocessing.x_test)
+        test_evaluator = Evaluate(test_prediction, test_expected_output, self.mlp.num_outputs)
+        test_evaluator.calculate_confusion_matrix()
+        print("Test Confusion Matrix: ")
+        print(test_evaluator.confusion_matrix)
+        print("Test Accuracy: ", test_evaluator.calculate_accuracy())
+
+    def classify_sample(self):
+        data = {'Area': [float(self.area_value.get())],
+                'Perimeter': [float(self.perimeter_value.get())],
+                'MajorAxisLength': [float(self.major_axis_length_value.get())],
+                'MinorAxisLength': [float(self.minor_axis_length_value.get())],
+                'roundnes': [float(self.roundnes_value.get())]}
+        sample = pd.DataFrame(data)
+        sample = self.preprocessing.normalize_sample(sample)
+        sample_prediction = self.mlp.predict(sample)
+        print("Sample Prediction: ", sample_prediction)
+

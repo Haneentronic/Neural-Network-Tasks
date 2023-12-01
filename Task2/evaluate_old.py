@@ -11,8 +11,8 @@ class Evaluate:
     def calculate_confusion_matrix(self):
         self.confusion_matrix = np.zeros((self.num_classes, self.num_classes))
         for i in range(len(self.prediction)):
-            ind1 = self.prediction[i].index(max(self.prediction[i]))
-            ind2 = list(self.actual.iloc[i,:]).index(max(self.actual.iloc[i, :]))
+            ind1 = list(self.prediction[i]).index(max(self.prediction[i]))
+            ind2 = list(self.actual[i]).index(max(self.actual[i]))
             self.confusion_matrix[ind2][ind1] += 1
 
     def calculate_accuracy(self):

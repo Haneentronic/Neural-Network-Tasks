@@ -48,6 +48,8 @@ class PreProcessing:
         self.x_test = self.scaler.transform(self.x_test.iloc[:, 0:5])
         self.x_test = pd.DataFrame(self.x_test)
 
+    def normalize_sample(self, sample):
+        return pd.DataFrame(self.scaler.transform(sample.iloc[:, 0:5]))
 
     def handel_outlier_with_column(self, column):
         col = self.df[column]

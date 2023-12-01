@@ -4,8 +4,10 @@ from PIL import Image, ImageTk
 from Task1.main import Task1
 from Task2.main import Task2
 
+
 def open_task(root, page):
     root.destroy()
+    import os
     page()
 
 
