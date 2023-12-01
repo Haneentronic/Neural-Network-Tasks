@@ -7,7 +7,6 @@ from Task2.main import Task2
 
 def open_task(root, page):
     root.destroy()
-    import os
     page()
 
 
