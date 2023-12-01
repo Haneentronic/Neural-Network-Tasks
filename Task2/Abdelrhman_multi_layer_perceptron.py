@@ -105,14 +105,24 @@ class MultiLayerPerceptron:
 
     def back_propagate(self, act_output):
         # print("errors: ")
-        i = self.layers_number - 1
-        while i > 0:
-            if i == self.layers_number - 1:
-                self.errors[i] = (act_output - self.activations[i]) * (self.activations[i] * (1 - self.activations[i]))
-            else:
-                self.errors[i] = np.dot(self.weights[i], self.errors[i + 1]) * self.activations[i] * (1 - self.activations[i])
-            # print(self.errors[i])
-            i -= 1
+        if self.activation == "sigmoid":
+            i = self.layers_number - 1
+            while i > 0:
+                if i == self.layers_number - 1:
+                    self.errors[i] = (act_output - self.activations[i]) * (self.activations[i] * (1 - self.activations[i]))
+                else:
+                    self.errors[i] = np.dot(self.weights[i], self.errors[i + 1]) * self.activations[i] * (1 - self.activations[i])
+                # print(self.errors[i])
+                i -= 1
+        elif self.activation == "tanh":
+            i = self.layers_number - 1
+            while i > 0:
+                if i == self.layers_number - 1:
+                    self.errors[i] = (act_output - self.activations[i]) * (1 - self.activations[i] ** 2)
+                else:
+                    self.errors[i] = np.dot(self.weights[i], self.errors[i + 1]) * (1 - self.activations[i] ** 2)
+                # print(self.errors[i])
+                i -= 1
 
     def update_weights(self, eta):
         # update weights
@@ -177,10 +187,10 @@ def extract_input_and_output(x, y):
 
     return INPUTS, OUTPUTS
 
-
+# TO RUN USING CONSOLE UNCOMMMENT STARTING FROM HERE
 # activation1 = "sigmoid"
 # activation2 = "tanh"
-# mlp = MultiLayerPerceptron(5, [3, 5], 3, activation1, 0)
+# mlp = MultiLayerPerceptron(5, [3, 5], 3, activation2, 0)
 #
 # preprocessing = PreProcessing()
 # preprocessing.read_data("Dry_Bean_Dataset.csv",
@@ -191,6 +201,7 @@ def extract_input_and_output(x, y):
 # preprocessing.null_handel()
 # preprocessing.normalize_train_data()
 # preprocessing.normalize_test_data()
+# STOP HERE, GO TO 220
 
 # num_samples, num_features = preprocessing.x_train.shape
 # INPUTS = []
@@ -206,6 +217,7 @@ def extract_input_and_output(x, y):
 # INPUTS = np.array(INPUTS)
 # OUTPUTS = np.array(OUTPUTS)
 
+# START HERE
 # train_input, train_expected_output = extract_input_and_output(preprocessing.x_train, preprocessing.y_train)
 # mlp.train(train_input, train_expected_output, 30, 0.5, 1)
 # train_prediction = mlp.predict(preprocessing.x_train)
@@ -222,7 +234,9 @@ def extract_input_and_output(x, y):
 # print("Test Confusion Matrix: ")
 # print(test_evaluator.confusion_matrix)
 # print("Test Accuracy: ", test_evaluator.calculate_accuracy())
+# STOP HERE
 
+# UNCOMMENT TO CLASSIFY SINGLE SAMPLE USING CONSOLE
 # import pandas as pd
 # data = {'Area': [114004],
 #         'Perimeter': [1279.356],
@@ -233,6 +247,8 @@ def extract_input_and_output(x, y):
 # sample = preprocessing.normalize_sample(sample)
 # sample_prediction = mlp.predict(sample)
 # print("Sample Prediction: ", sample_prediction)
+# STOP HERE
+
 # convert weights on the last layer to 1 (mx), 0(others)
 # def converter(x):
 #     max_indices = np.argmax(x, axis=1)
