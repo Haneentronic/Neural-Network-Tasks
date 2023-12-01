@@ -4,7 +4,7 @@ import pandas as pd
 from PIL import Image, ImageTk
 from Task2.preprocessing import PreProcessing
 from Task2.evaluate_old import Evaluate
-from Task2.Abdelrhman_multi_layer_perceptron import MultiLayerPerceptron, extract_input_and_output
+from Task2.multi_layer_perceptron import MultiLayerPerceptron, extract_input_and_output
 
 
 class Task2:
@@ -213,4 +213,13 @@ class Task2:
         sample = self.preprocessing.normalize_sample(sample)
         sample_prediction = self.mlp.predict(sample)
         print("Sample Prediction: ", sample_prediction)
+
+        predicted_class = None
+        if sample_prediction[0][0] == 1:
+            predicted_class = "BOMBAY"
+        elif sample_prediction[0][1] == 1:
+            predicted_class = "CALI"
+        elif sample_prediction[0][2] == 1:
+            predicted_class = "SIRA"
+        print("predicted class for ur Inputs is: ", predicted_class)
 

@@ -23,20 +23,6 @@ class MultiLayerPerceptron:
             # print(w.shape)
             self.weights.append(w)
 
-        # self.weights = []
-        # w = [
-        #     [0.21, -0.4],
-        #     [0.15, 0.1]
-        # ]
-        # w = np.array(w)
-        # self.weights.append(w)
-        # w = [
-        #     [-0.2],
-        #     [0.3]
-        # ]
-        # w = np.array(w)
-        # self.weights.append(w)
-
         # initiate bias for each layer [from first hidden layer to output layer]
         biases = []
         if bias_enable == 1:
@@ -48,26 +34,6 @@ class MultiLayerPerceptron:
                 b = np.zeros(self.layers[i])
                 biases.append(b)
         self.biases = biases
-
-        # self.biases = []
-        # b = [-0.3, 0.25]
-        # b = np.array(b)
-        # self.biases.append(b)
-        # b = [-0.4]
-        # b = np.array(b)
-        # self.biases.append(b)
-
-        #
-        # for w in self.weights:
-        #     print(w)
-        #     print(w.shape)
-        #
-        # for b in self.bias:
-        #     print(b)
-        #     print(b.shape)
-
-        # for b in self.biases:
-        #     print(b)
 
         # activations for each layer
         activations = []
@@ -100,12 +66,8 @@ class MultiLayerPerceptron:
             self.activations[i + 1] = activations_tmp
 
         return activations_tmp
-        # print("activations")
-        # for a in self.activations:
-        #     print(a)
 
     def back_propagate(self, act_output):
-        # print("errors: ")
         if self.activation == "sigmoid":
             i = self.layers_number - 1
             while i > 0:
@@ -113,7 +75,6 @@ class MultiLayerPerceptron:
                     self.errors[i] = (act_output - self.activations[i]) * (self.activations[i] * (1 - self.activations[i]))
                 else:
                     self.errors[i] = np.dot(self.weights[i], self.errors[i + 1]) * self.activations[i] * (1 - self.activations[i])
-                # print(self.errors[i])
                 i -= 1
         elif self.activation == "tanh":
             i = self.layers_number - 1
@@ -122,7 +83,6 @@ class MultiLayerPerceptron:
                     self.errors[i] = (act_output - self.activations[i]) * (1 - self.activations[i] ** 2)
                 else:
                     self.errors[i] = np.dot(self.weights[i], self.errors[i + 1]) * (1 - self.activations[i] ** 2)
-                # print(self.errors[i])
                 i -= 1
 
     def update_weights(self, eta):
@@ -130,22 +90,15 @@ class MultiLayerPerceptron:
         for i in range(len(self.weights)):
             inputs = self.activations[i]
             errors = self.errors[i + 1]
-            # print("inputs", inputs)
-            # print("errors", errors)
-            # print("original w\n", self.weights[i])
             inputs_matrix = inputs.reshape((-1, 1))
             errors_matrix = errors.reshape((-1, 1))
             update_matrix = np.outer(inputs_matrix, errors_matrix.T)
             self.weights[i] += update_matrix * eta
-            # print("updated w\n", self.weights[i])
 
             # update bias
             if self.bias_enable:
                 bias = self.biases[i]
-                # print("old bias", bias)
                 self.biases[i] += errors * eta
-                # print("new bias", bias)
-                # print("---------")
 
     def train(self, inputs, targets, epochs, eta, bias_enable):
         for epoch in range(epochs):
@@ -174,35 +127,36 @@ class MultiLayerPerceptron:
 
 def extract_input_and_output(x, y):
     num_samples, num_features = x.shape
-    INPUTS = []
-    OUTPUTS = []
+    inputs = []
+    outputs = []
     for i in range(num_samples):
         values = x.iloc[i].values
         targets = y.iloc[i].values
         values = np.array(values)
         targets = np.array(targets)
-        INPUTS.append(values)
-        OUTPUTS.append(targets)
+        inputs.append(values)
+        outputs.append(targets)
 
-    INPUTS = np.array(INPUTS)
-    OUTPUTS = np.array(OUTPUTS)
+    inputs = np.array(inputs)
+    outputs = np.array(outputs)
 
-    return INPUTS, OUTPUTS
+    return inputs, outputs
 
-# TO RUN USING CONSOLE UNCOMMMENT STARTING FROM HERE
-activation1 = "sigmoid"
-activation2 = "tanh"
-mlp = MultiLayerPerceptron(5, [3, 5], 3, activation1, 0)
 
-preprocessing = PreProcessing()
-preprocessing.read_data("Dry_Bean_Dataset.csv",
-                        ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
-                        ['CALI', 'BOMBAY', 'SIRA'])
-preprocessing.handel_all_outliers()
-preprocessing.split_data(40)
-preprocessing.null_handel()
-preprocessing.normalize_train_data()
-preprocessing.normalize_test_data()
+# CONSOLE TEST
+# activation1 = "sigmoid"
+# activation2 = "tanh"
+# mlp = MultiLayerPerceptron(5, [3, 5], 3, activation1, 0)
+#
+# preprocessing = PreProcessing()
+# preprocessing.read_data("Dry_Bean_Dataset.csv",
+#                         ['Area', 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'roundnes'],
+#                         ['CALI', 'BOMBAY', 'SIRA'])
+# preprocessing.handel_all_outliers()
+# preprocessing.split_data(40)
+# preprocessing.null_handel()
+# preprocessing.normalize_train_data()
+# preprocessing.normalize_test_data()
 # STOP HERE, GO TO 220
 
 # num_samples, num_features = preprocessing.x_train.shape
@@ -220,44 +174,44 @@ preprocessing.normalize_test_data()
 # OUTPUTS = np.array(OUTPUTS)
 
 # START HERE
-train_input, train_expected_output = extract_input_and_output(preprocessing.x_train, preprocessing.y_train)
-mlp.train(train_input, train_expected_output, 20, 0.5, 1)
-train_prediction = mlp.predict(preprocessing.x_train)
-train_evaluator = Evaluate(train_prediction, train_expected_output, mlp.num_outputs)
-train_evaluator.calculate_confusion_matrix()
-print("Train Confusion Matrix: ")
-print(train_evaluator.confusion_matrix)
-print("Train Accuracy: ", train_evaluator.calculate_accuracy())
-
-test_input, test_expected_output = extract_input_and_output(preprocessing.x_test, preprocessing.y_test)
-test_prediction = mlp.predict(preprocessing.x_test)
-test_evaluator = Evaluate(test_prediction, test_expected_output, mlp.num_outputs)
-test_evaluator.calculate_confusion_matrix()
-print("Test Confusion Matrix: ")
-print(test_evaluator.confusion_matrix)
-print("Test Accuracy: ", test_evaluator.calculate_accuracy())
+# train_input, train_expected_output = extract_input_and_output(preprocessing.x_train, preprocessing.y_train)
+# mlp.train(train_input, train_expected_output, 20, 0.5, 1)
+# train_prediction = mlp.predict(preprocessing.x_train)
+# train_evaluator = Evaluate(train_prediction, train_expected_output, mlp.num_outputs)
+# train_evaluator.calculate_confusion_matrix()
+# print("Train Confusion Matrix: ")
+# print(train_evaluator.confusion_matrix)
+# print("Train Accuracy: ", train_evaluator.calculate_accuracy())
+#
+# test_input, test_expected_output = extract_input_and_output(preprocessing.x_test, preprocessing.y_test)
+# test_prediction = mlp.predict(preprocessing.x_test)
+# test_evaluator = Evaluate(test_prediction, test_expected_output, mlp.num_outputs)
+# test_evaluator.calculate_confusion_matrix()
+# print("Test Confusion Matrix: ")
+# print(test_evaluator.confusion_matrix)
+# print("Test Accuracy: ", test_evaluator.calculate_accuracy())
 # STOP HERE
 
 # UNCOMMENT TO CLASSIFY SINGLE SAMPLE USING CONSOLE
-import pandas as pd
-data = {'Area': [114004],
-        'Perimeter': [1279.356],
-        'MajorAxisLength': [451.3612558],
-        'MinorAxisLength': [323.7479961],
-        'roundnes': [0.875280258]}
-sample = pd.DataFrame(data)
-sample = preprocessing.normalize_sample(sample)
-sample_prediction = mlp.predict(sample)
-
-print("Sample Prediction: ", sample_prediction)
-predicted_class = []
-if sample_prediction[0][0] == 1:
-    predicted_class = "BOMBAY"
-elif sample_prediction[0][1] == 1:
-    predicted_class = "CALI"
-elif sample_prediction[0][2] == 1:
-    predicted_class = "SIRA"
-print("predicted class for ur inputs: ", predicted_class)
+# import pandas as pd
+# data = {'Area': [114004],
+#         'Perimeter': [1279.356],
+#         'MajorAxisLength': [451.3612558],
+#         'MinorAxisLength': [323.7479961],
+#         'roundnes': [0.875280258]}
+# sample = pd.DataFrame(data)
+# sample = preprocessing.normalize_sample(sample)
+# sample_prediction = mlp.predict(sample)
+#
+# print("Sample Prediction: ", sample_prediction)
+# predicted_class = []
+# if sample_prediction[0][0] == 1:
+#     predicted_class = "BOMBAY"
+# elif sample_prediction[0][1] == 1:
+#     predicted_class = "CALI"
+# elif sample_prediction[0][2] == 1:
+#     predicted_class = "SIRA"
+# print("predicted class for ur inputs: ", predicted_class)
 
 # convert weights on the last layer to 1 (mx), 0(others)
 # def converter(x):
