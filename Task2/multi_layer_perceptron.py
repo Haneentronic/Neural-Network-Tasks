@@ -1,6 +1,6 @@
 import numpy as np
-from preprocessing import PreProcessing
-from evaluate import Evaluate
+from Task2.preprocessing import PreProcessing
+# from evaluate import Evaluate
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -23,13 +23,13 @@ class NeuralNetwork:
             else:
                 w = np.random.randn(self.layers[i - 1], self.layers[i])
             self.weights.append(w)
-    def sigmoid(x, derivative=False):
+    def sigmoid(self, x, derivative=False):
         if derivative:
             return x * (1 - x)
         else:
             return 1 / (1 + np.exp(-x))
 
-    def tanh(x, derivative=False):
+    def tanh(self, x, derivative=False):
         if derivative:
             return 1 - np.tanh(x) ** 2
         else:

@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from Task2.preprocessing import PreProcessing
 from Task2.evaluate_old import Evaluate
 from Task2.multi_layer_perceptron_nonVectorized import NeuralNetwork
+# from Task2.multi_layer_perceptron import NeuralNetwork
 
 class Task2:
     def __init__(self):
@@ -182,7 +183,9 @@ class Task2:
         hidden_neurons_list = list(self.num_neurons_value.get().split(","))
         hidden_neurons_list = list(map(int, hidden_neurons_list))
 
-        NN = NeuralNetwork(5, int(self.num_hidden_layers_value.get()), hidden_neurons_list, 3, float(self.learning_rate_value.get()),  int(self.epochs_value.get()), self.activation_function_value.get(), int(self.bias_checkbox_value.get()))
+        NN = NeuralNetwork(5, int(self.num_hidden_layers_value.get()), hidden_neurons_list, 3,
+                           float(self.learning_rate_value.get()),  int(self.epochs_value.get()),
+                           self.activation_function_value.get(), int(self.bias_checkbox_value.get()))
         NN.train(preprocessing.x_train, preprocessing.y_train)
         train_prediction = NN.predict(preprocessing.x_train)
         train_evaluator = Evaluate(train_prediction, preprocessing.y_train, 3)
