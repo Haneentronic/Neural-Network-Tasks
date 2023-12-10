@@ -34,7 +34,7 @@ class Perceptron:
                         self.bias = self.bias + (loss * self.learning_rate)
 
     def perceptron_test(self):
-        y = np.dot(self.data.x_test, self.w.T)
+        y = np.dot(self.data.x_test, self.w.T) + self.bias
         self.prediction = np.where(y >= 0, 1, -1)
         self.y_true = np.array(self.data.y_test.iloc[:, -1])
 
