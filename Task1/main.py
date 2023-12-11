@@ -247,6 +247,8 @@ class Task1:
         preprocessing.read_data("Task1/Dry_Bean_Dataset.csv", features_list, class_list)
         preprocessing.split_data(40)
         preprocessing.null_handel()
+        preprocessing.normalize_train_data()
+        preprocessing.normalize_test_data()
 
         if self.algorithm_value.get() == "perceptron":
             o = Perceptron(preprocessing, int(self.epochs_value.get()), float(self.learning_rate_entry.get()),
@@ -256,11 +258,9 @@ class Task1:
             print("Perceptron Accuracy: ", o.accuracy_score())
             print("-------------")
             o.plot_confusion_matrix(o.confusion_matrix(), class_list)
-            o.ploting()
+            o.plotting()
 
         elif self.algorithm_value.get() == "adaline":
-            preprocessing.normalize_train_data()
-            preprocessing.normalize_test_data()
             adaline = Adaline()
 
             adaline.train(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get()
