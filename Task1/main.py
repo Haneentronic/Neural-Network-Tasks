@@ -196,27 +196,18 @@ class Task1:
         self.feature1_label = Label(self.root, image=self.feature1_image, background=self.mainColor)
 
         self.feature1_value = StringVar(value="none")
-        self.feature1_entry = OptionMenu(self.root, self.feature1_value, "Area", "Perimeter", "MajorAxisLength",
-                                         "MinorAxisLength", "Roundnes")
-        self.feature1_entry.config(background=self.mainColor, borderwidth=0, width=13, highlightthickness=0,
-                                   activebackground=self.mainColor, foreground=self.foregroundColor,
-                                   font=(self.font, 11, 'bold'), activeforeground=self.foregroundColor, cursor="hand2")
-        self.feature1_entry["menu"].config(bg=self.mainColor, activebackground=self.secondColor, foreground=self.foregroundColor,
-                                           font=(self.font, 14))
+        self.feature1_entry = Entry(self.root, width=14, font=("arial", 14), bd=0,
+                               textvariable=self.feature1_value,
+                               background=self.mainColor, foreground=self.foregroundColor)
 
         self.feature2 = Image.open("../Neural-Project/Photos/Task1/input2.png")
         self.feature2_image = ImageTk.PhotoImage(self.feature2)
         self.feature2_label = Label(self.root, image=self.feature2_image, background=self.mainColor)
 
         self.feature2_value = StringVar(value="none")
-        self.feature2_entry = OptionMenu(self.root, self.feature2_value, "Area", "Perimeter", "MajorAxisLength",
-                                         "MinorAxisLength", "Roundnes")
-        self.feature2_entry.config(background=self.mainColor, borderwidth=0, width=13, highlightthickness=0,
-                                   activebackground=self.mainColor, foreground=self.foregroundColor,
-                                   font=(self.font, 11, 'bold'), activeforeground=self.foregroundColor, cursor="hand2")
-        self.feature2_entry["menu"].config(bg=self.mainColor, activebackground=self.secondColor,
-                                           foreground=self.foregroundColor,
-                                           font=(self.font, 14))
+        self.feature2_entry = Entry(self.root, width=14, font=("arial", 14), bd=0,
+                               textvariable=self.feature1_value,
+                               background=self.mainColor, foreground=self.foregroundColor)
 
         self.classify_sample_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/classify_sample_btn.png")
         self.classify_sample_button = Button(self.root, image=self.classify_sample_button_image, borderwidth=0, cursor="hand2", bd=0,
