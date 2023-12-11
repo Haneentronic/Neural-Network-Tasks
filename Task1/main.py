@@ -11,6 +11,7 @@ class Task1:
         self.mainColor = 'white'
         self.foregroundColor = '#FF8888'
         self.secondColor = '#6FAF07'
+        self.font = "Comic Sans MS"
 
         self.root = tk.Tk()
         self.root.geometry("1000x563")
@@ -190,6 +191,38 @@ class Task1:
                                  background=self.mainColor, activebackground=self.mainColor,
                                  command=lambda: self.run())
 
+        self.feature1 = Image.open("../Neural-Project/Photos/Task1/input2.png")
+        self.feature1_image = ImageTk.PhotoImage(self.feature1)
+        self.feature1_label = Label(self.root, image=self.feature1_image, background=self.mainColor)
+
+        self.feature1_value = StringVar(value="none")
+        self.feature1_entry = OptionMenu(self.root, self.feature1_value, "Area", "Perimeter", "MajorAxisLength",
+                                         "MinorAxisLength", "Roundnes")
+        self.feature1_entry.config(background=self.mainColor, borderwidth=0, width=13, highlightthickness=0,
+                                   activebackground=self.mainColor, foreground=self.foregroundColor,
+                                   font=(self.font, 11, 'bold'), activeforeground=self.foregroundColor, cursor="hand2")
+        self.feature1_entry["menu"].config(bg=self.mainColor, activebackground=self.secondColor, foreground=self.foregroundColor,
+                                           font=(self.font, 14))
+
+        self.feature2 = Image.open("../Neural-Project/Photos/Task1/input2.png")
+        self.feature2_image = ImageTk.PhotoImage(self.feature2)
+        self.feature2_label = Label(self.root, image=self.feature2_image, background=self.mainColor)
+
+        self.feature2_value = StringVar(value="none")
+        self.feature2_entry = OptionMenu(self.root, self.feature2_value, "Area", "Perimeter", "MajorAxisLength",
+                                         "MinorAxisLength", "Roundnes")
+        self.feature2_entry.config(background=self.mainColor, borderwidth=0, width=13, highlightthickness=0,
+                                   activebackground=self.mainColor, foreground=self.foregroundColor,
+                                   font=(self.font, 11, 'bold'), activeforeground=self.foregroundColor, cursor="hand2")
+        self.feature2_entry["menu"].config(bg=self.mainColor, activebackground=self.secondColor,
+                                           foreground=self.foregroundColor,
+                                           font=(self.font, 14))
+
+        self.classify_sample_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/classify_sample_btn.png")
+        self.classify_sample_button = Button(self.root, image=self.classify_sample_button_image, borderwidth=0, cursor="hand2", bd=0,
+                                 background=self.mainColor, activebackground=self.mainColor,
+                                 command=lambda: self.run())
+
     def run(self):
         features_list = []
         if self.area_checkbox_value.get() != "None":
@@ -270,10 +303,19 @@ class Task1:
 
         self.bias_checkbox.place(anchor='center', relx=0.626, y=395)
 
-        self.perceptron_button.place(anchor='center', relx=0.23, y=460)
-        self.adaline_button.place(anchor='center', relx=0.45, y=460)
+        self.perceptron_button.place(anchor='center', relx=0.23, y=440)
+        self.adaline_button.place(anchor='center', relx=0.45, y=440)
 
         self.run_button.place(anchor='center', relx=0.67, y=458)
+
+        self.feature1_label.place(anchor='center', relx=0.198, y=500)
+        self.feature1_entry.place(anchor='center', relx=0.198, y=500)
+
+        self.feature2_label.place(anchor='center', relx=0.385, y=500)
+        self.feature2_entry.place(anchor='center', relx=0.385, y=500)
+
+        self.classify_sample_button.place(anchor='center', relx=0.54, y=500)
+
         self.image_label.pack()
 
     def update_classes_checkbox(self):
