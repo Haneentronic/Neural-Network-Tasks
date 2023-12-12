@@ -132,6 +132,15 @@ class Adaline:
         plt.title('Adaline Confusion Matrix')
         plt.show()
 
+    def predict(self, x, b):
+        if b:
+            x = np.append(x, 1)
+        # print(x)
+        # print(self.weights)
+        prediction = np.dot(self.weights, x)
+        predicted_class = 1 if prediction >= 0 else -1
+        return predicted_class
+
 
 # CONSOLE TEST
 # ft = ["Perimeter", "MajorAxisLength"]

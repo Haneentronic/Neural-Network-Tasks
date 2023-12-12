@@ -159,7 +159,7 @@ class Task1:
                                textvariable=self.mse_value,
                                background=self.mainColor, foreground=self.foregroundColor)
 
-        self.bias_checkbox_value = IntVar(value=-1)
+        self.bias_checkbox_value = IntVar(value=1)
         self.bias_image_on = PhotoImage(file="../Neural-Project/Photos/Task1/on/bias.png")
         self.bias_image_off = PhotoImage(file="../Neural-Project/Photos/Task1/off/not_bias.png")
         self.bias_checkbox = Checkbutton(self.root, variable=self.bias_checkbox_value,
@@ -206,13 +206,13 @@ class Task1:
 
         self.feature2_value = StringVar(value="none")
         self.feature2_entry = Entry(self.root, width=14, font=("arial", 14), bd=0,
-                               textvariable=self.feature1_value,
+                               textvariable=self.feature2_value,
                                background=self.mainColor, foreground=self.foregroundColor)
 
         self.classify_sample_button_image = PhotoImage(file="../Neural-Project/Photos/Task1/classify_sample_btn.png")
         self.classify_sample_button = Button(self.root, image=self.classify_sample_button_image, borderwidth=0, cursor="hand2", bd=0,
                                  background=self.mainColor, activebackground=self.mainColor,
-                                 command=lambda: self.run())
+                                 command=lambda: self.classify())
 
     def run(self):
         features_list = []
@@ -242,24 +242,40 @@ class Task1:
         preprocessing.normalize_test_data()
 
         if self.algorithm_value.get() == "perceptron":
-            o = Perceptron(preprocessing, int(self.epochs_value.get()), float(self.learning_rate_entry.get()),
+            self.o = Perceptron(preprocessing, int(self.epochs_value.get()), float(self.learning_rate_entry.get()),
                            self.bias_checkbox_value.get())
-            o.perceptron_train()
-            o.perceptron_test()
-            print("Perceptron Accuracy: ", o.accuracy_score())
+            self.o.perceptron_train()
+            self.o.perceptron_test()
+            print("Perceptron Accuracy: ", self.o.accuracy_score())
             print("-------------")
-            o.plot_confusion_matrix(o.confusion_matrix(), class_list)
-            o.plotting()
+            self.o.plot_confusion_matrix(self.o.confusion_matrix(), class_list)
+            self.o.plotting()
 
         elif self.algorithm_value.get() == "adaline":
-            adaline = Adaline()
+            self.adaline = Adaline()
 
-            adaline.train(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get()
+            self.adaline.train(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get()
                           , float(self.learning_rate_entry.get()), float(self.mse_entry.get()))
 
-            adaline.plot_decision_boundary(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get())
+            self.adaline.plot_decision_boundary(preprocessing.x_train, preprocessing.y_train, self.bias_checkbox_value.get())
 
-            adaline.test(preprocessing.x_test, preprocessing.y_test, self.bias_checkbox_value.get())
+            self.adaline.test(preprocessing.x_test, preprocessing.y_test, self.bias_checkbox_value.get())
+            print("-------------")
+
+    def classify(self):
+        sample = [float(self.feature1_entry.get()), float(self.feature2_entry.get())]
+        # print(sample)
+
+        if self.algorithm_value.get() == "adaline":
+            pred = self.adaline.predict(x=sample, b=self.bias_checkbox_value.get())
+
+            print("Sample Prediction: ", pred)
+            print("-------------")
+
+        elif self.algorithm_value.get() == "perceptron":
+            pred = self.o.predict(sample, self.bias_checkbox_value.get())
+
+            print("Sample Prediction: ", pred)
             print("-------------")
 
     def placing_widgets(self):

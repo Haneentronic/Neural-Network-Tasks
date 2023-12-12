@@ -101,3 +101,10 @@ class Perceptron:
         plt.ylabel('True')
         plt.title('Perceptron Confusion Matrix')
         plt.show()
+
+    def predict(self, x, b):
+        # print(x)
+        # print(self.w)
+        prediction = np.dot(self.w.T, x) + b
+        predicted_class = 1 if prediction >= 0 else -1
+        return predicted_class
